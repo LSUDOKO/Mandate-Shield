@@ -1,0 +1,580 @@
+/* Mandate Shield — an operations console, not a marketing page.
+   Everything that matters here is a hash, an identifier, or an amount in
+   paise, so the interface is set in mono and aligned in columns like the
+   ledger it is. Colour carries state and nothing else. */
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap");
+
+:root {
+  --ink: #0b0e14;
+  --surface: #151a23;
+  --surface-raised: #1b212c;
+  --hairline: #232a36;
+  --cleared: #3ddc97;
+  --held: #ff5c5c;
+  --text: #e6eaf2;
+  --dim: #7a869a;
+  --amber: #ffc857;
+
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --sans: "Inter", system-ui, -apple-system, sans-serif;
+
+  --gap: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------------- layout */
+
+.app {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 28px var(--gap) 64px;
+}
+
+.masthead {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.masthead .tagline {
+  font-family: var(--sans);
+  color: var(--dim);
+  font-size: 13px;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: var(--gap);
+  align-items: start;
+  margin-top: var(--gap);
+}
+
+@media (max-width: 1020px) {
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+}
+
+.panel > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.panel h2 {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* ------------------------------------------------------------ status bar */
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  background: var(--surface);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.chip .key {
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dim);
+  flex: none;
+}
+
+.dot.live {
+  background: var(--cleared);
+}
+
+.dot.offline {
+  background: var(--amber);
+}
+
+.dot.broken {
+  background: var(--held);
+}
+
+/* ------------------------------------------------------------- simulator */
+
+.simulator {
+  margin-top: 16px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+}
+
+.simulator .row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.simulator input {
+  flex: 1 1 320px;
+  min-width: 0;
+  padding: 9px 11px;
+  background: var(--ink);
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.simulator input:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--cleared);
+  outline-offset: 1px;
+}
+
+button {
+  padding: 9px 14px;
+  background: var(--surface-raised);
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--dim);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button.primary {
+  background: var(--cleared);
+  border-color: var(--cleared);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+button.attack {
+  border-color: rgba(255, 92, 92, 0.35);
+  color: #ffb3b3;
+}
+
+button.attack:hover:not(:disabled) {
+  border-color: var(--held);
+}
+
+.attack-row {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline);
+}
+
+.attack-row .label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* ------------------------------------------------------------------ feed */
+
+.feed {
+  max-height: 640px;
+  overflow-y: auto;
+}
+
+.feed-item {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  border-left: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.feed-item:hover {
+  background: var(--surface-raised);
+}
+
+.feed-item[aria-current="true"] {
+  background: var(--surface-raised);
+  border-left-color: var(--cleared);
+}
+
+.feed-item.block[aria-current="true"] {
+  border-left-color: var(--held);
+}
+
+.feed-item .top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.feed-item .instruction {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.feed-item .meta {
+  margin-top: 5px;
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.verdict {
+  flex: none;
+  padding: 2px 7px;
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.verdict.pass {
+  background: rgba(61, 220, 151, 0.14);
+  color: var(--cleared);
+}
+
+.verdict.block {
+  background: rgba(255, 92, 92, 0.14);
+  color: var(--held);
+}
+
+/* -------------------------------------------- the signature: check column */
+
+/* Five stacked bars, one per check, in fixed order. The failure point is
+   visible spatially before a single word is read. */
+.ladder {
+  display: flex;
+  gap: 3px;
+  margin-top: 8px;
+}
+
+.ladder .rung {
+  height: 3px;
+  flex: 1;
+  border-radius: 1px;
+  background: var(--hairline);
+}
+
+.ladder .rung.pass {
+  background: var(--cleared);
+}
+
+.ladder .rung.fail {
+  background: var(--held);
+}
+
+/* ---------------------------------------------------------------- detail */
+
+.detail {
+  padding: 14px;
+}
+
+.detail .banner {
+  padding: 11px 12px;
+  border-radius: 3px;
+  border-left: 2px solid;
+  margin-bottom: 16px;
+  font-family: var(--sans);
+  font-size: 13px;
+}
+
+.detail .banner.pass {
+  background: rgba(61, 220, 151, 0.07);
+  border-color: var(--cleared);
+}
+
+.detail .banner.block {
+  background: rgba(255, 92, 92, 0.07);
+  border-color: var(--held);
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 0 0 8px;
+}
+
+/* Rendered vs signed, side by side — the T-7 comparison made visual. */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 560px) {
+  .compare {
+    grid-template-columns: 1fr;
+  }
+}
+
+.compare > div {
+  background: var(--ink);
+  padding: 11px 12px;
+}
+
+.compare .amount {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.compare .amount.mismatch {
+  color: var(--held);
+}
+
+.kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+  font-size: 12px;
+}
+
+.kv .k {
+  color: var(--dim);
+}
+
+.kv .v {
+  text-align: right;
+  word-break: break-all;
+}
+
+.checks {
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.check {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.check:last-child {
+  border-bottom: 0;
+}
+
+.check .mark {
+  font-weight: 600;
+}
+
+.check.pass .mark {
+  color: var(--cleared);
+}
+
+.check.fail .mark {
+  color: var(--held);
+}
+
+.check .name {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.check .threats {
+  font-size: 10px;
+  color: var(--dim);
+}
+
+.check .reason {
+  margin-top: 3px;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.5;
+}
+
+.provenance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.tag {
+  padding: 3px 8px;
+  border: 1px solid var(--hairline);
+  border-radius: 2px;
+  font-size: 11px;
+}
+
+.tag .src {
+  color: var(--dim);
+}
+
+.tag.suspect {
+  border-color: rgba(255, 92, 92, 0.4);
+}
+
+.tag.suspect .src {
+  color: var(--held);
+}
+
+.gateway {
+  padding: 11px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  background: var(--ink);
+}
+
+.gateway a {
+  color: var(--cleared);
+  word-break: break-all;
+}
+
+/* ----------------------------------------------------------------- audit */
+
+.audit {
+  margin-top: var(--gap);
+}
+
+.audit-list {
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.audit-entry {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  gap: 12px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 11px;
+}
+
+.audit-entry:last-child {
+  border-bottom: 0;
+}
+
+.audit-entry .chainlink {
+  color: var(--dim);
+  word-break: break-all;
+}
+
+.empty {
+  padding: 28px 14px;
+  text-align: center;
+  color: var(--dim);
+  font-family: var(--sans);
+}
+
+.error {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 92, 92, 0.4);
+  border-radius: 3px;
+  background: rgba(255, 92, 92, 0.07);
+  color: #ffb3b3;
+  font-family: var(--sans);
+  font-size: 13px;
+}
+
+.scope {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--hairline);
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

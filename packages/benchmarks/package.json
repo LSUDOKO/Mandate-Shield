@@ -1,0 +1,11 @@
+{
+  "name": "@mandate-shield/benchmarks",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "benchmark": "tsx src/runBenchmark.ts",
+    "generate": "tsx src/generateTestBatch.ts --write"
+  },
+  "dependencies": { "@mandate-shield/core": "*" },
+  "devDependencies": { "tsx": "^4.19.2" }
+}

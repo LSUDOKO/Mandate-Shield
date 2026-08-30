@@ -1,0 +1,445 @@
+{
+  "metrics": {
+    "tp": 15,
+    "fp": 0,
+    "tn": 35,
+    "fn": 0,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1,
+    "accuracy": 1,
+    "total": 50
+  },
+  "outcomes": [
+    {
+      "id": "legit-01",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-02",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-03",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-04",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-05",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-06",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-07",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-08",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-09",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-10",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-11",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-12",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-13",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-14",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-15",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-16",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-17",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-18",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-19",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-20",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-21",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-22",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-23",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-24",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-25",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-26",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-27",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-28",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-29",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-30",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-31",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-32",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-33",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-34",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "legit-35",
+      "expected": "PASS",
+      "actual": "PASS",
+      "label": "legitimate",
+      "threat_class": null,
+      "failed_checks": []
+    },
+    {
+      "id": "atk-wysiwys-1",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "wysiwys",
+      "failed_checks": [
+        "wysiwys"
+      ]
+    },
+    {
+      "id": "atk-wysiwys-2",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "wysiwys",
+      "failed_checks": [
+        "wysiwys"
+      ]
+    },
+    {
+      "id": "atk-wysiwys-3",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "wysiwys",
+      "failed_checks": [
+        "wysiwys"
+      ]
+    },
+    {
+      "id": "atk-field-1",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "field_completeness",
+      "failed_checks": [
+        "field_completeness"
+      ]
+    },
+    {
+      "id": "atk-field-2",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "field_completeness",
+      "failed_checks": [
+        "field_completeness"
+      ]
+    },
+    {
+      "id": "atk-field-3",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "field_completeness",
+      "failed_checks": [
+        "field_completeness"
+      ]
+    },
+    {
+      "id": "atk-catalog-1",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "catalog_injection",
+      "failed_checks": [
+        "catalog_segregation"
+      ]
+    },
+    {
+      "id": "atk-catalog-2",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "catalog_injection",
+      "failed_checks": [
+        "catalog_segregation"
+      ]
+    },
+    {
+      "id": "atk-catalog-3",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "catalog_injection",
+      "failed_checks": [
+        "catalog_segregation"
+      ]
+    },
+    {
+      "id": "atk-replay-1",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "replay",
+      "failed_checks": [
+        "replay_ledger"
+      ]
+    },
+    {
+      "id": "atk-replay-2",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "replay",
+      "failed_checks": [
+        "replay_ledger"
+      ]
+    },
+    {
+      "id": "atk-replay-3",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "replay",
+      "failed_checks": [
+        "replay_ledger"
+      ]
+    },
+    {
+      "id": "atk-actor-1",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "actor_spoofing",
+      "failed_checks": [
+        "actor_identity"
+      ]
+    },
+    {
+      "id": "atk-actor-2",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "actor_spoofing",
+      "failed_checks": [
+        "actor_identity"
+      ]
+    },
+    {
+      "id": "atk-actor-3",
+      "expected": "BLOCK",
+      "actual": "BLOCK",
+      "label": "attack",
+      "threat_class": "actor_spoofing",
+      "failed_checks": [
+        "actor_identity"
+      ]
+    }
+  ]
+}
