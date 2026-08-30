@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Build dashboard
+        run: npm run build -w @mandate-shield/dashboard
+
+      - name: Test
+        run: npm test
+
+      # No secrets are configured for this job on purpose: it proves the
+      # repository runs end to end, benchmark included, with zero API keys.
+      - name: Benchmark
+        run: npm run benchmark
+
+      - name: Confirm the committed benchmark matches a fresh run
+        run: git diff --exit-code packages/benchmarks/results.md

@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+.git
+.github
+data
+docs
+webmcp
+.env
+.env.local
+*.log
+.playwright-mcp

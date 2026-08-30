@@ -1,0 +1,47 @@
+# One command to run everything: `docker compose up --build`
+#
+# No credentials are required. Without them the agent uses its deterministic
+# parser and the gateway returns mock orders and links; both report which mode
+# they are in on /api/health so nothing is mistaken for a live integration.
+
+services:
+  api:
+    build: .
+    # Override the host port when 3000 is taken: API_PORT=3555 docker compose up
+    ports:
+      - "${API_PORT:-3000}:3000"
+    environment:
+      PORT: 3000
+      AUDIT_DB_PATH: /app/data/audit.db
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_MODEL: ${GROQ_MODEL:-llama-3.3-70b-versatile}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-}
+      RAZORPAY_WEBHOOK_SECRET: ${RAZORPAY_WEBHOOK_SECRET:-}
+      ACTOR_HMAC_SECRET: ${ACTOR_HMAC_SECRET:-dev-only-change-me}
+    volumes:
+      - mandate-shield-data:/app/data
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+
+  dashboard:
+    build: .
+    command: ["npm", "run", "preview", "-w", "@mandate-shield/dashboard"]
+    ports:
+      - "${DASHBOARD_PORT:-5173}:5173"
+    environment:
+      API_URL: http://api:3000
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  mandate-shield-data:
