@@ -1,0 +1,31 @@
+{
+  "name": "mandate-shield",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A deterministic security checkpoint between an AI shopping agent and the moment a payment mandate gets signed.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "benchmark": "npm run benchmark -w @mandate-shield/benchmarks",
+    "benchmark:generate": "npm run generate -w @mandate-shield/benchmarks",
+    "dev": "npm run dev -w @mandate-shield/server",
+    "start": "node packages/server/dist/index.js",
+    "dashboard": "npm run dev -w @mandate-shield/dashboard"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
