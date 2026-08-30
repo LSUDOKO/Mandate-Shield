@@ -12,7 +12,52 @@ export interface ShoppingAgentOptions {
   catalog?: CatalogProduct[];
 }
 
-const DEFAULT_MODEL = "llama-3.3-70b-versatile";
+const DEFAULT_MODEL = "openai/gpt-oss-120b";
+
+/** The only categories the catalog actually uses. */
+const KNOWN_CATEGORIES = ["footwear", "apparel", "electronics", "fitness", "accessories"] as const;
+
+/** Maps the free text a model tends to return onto a real catalog category. */
+const CATEGORY_SYNONYMS: Array<[RegExp, string]> = [
+  [/shoe|sneaker|runner|footwear|trainer|boot/i, "footwear"],
+  [/tee|shirt|jacket|tight|apparel|cloth|wear|windbreaker/i, "apparel"],
+  [/watch|earbud|headphone|electronic|gps|tech/i, "electronics"],
+  [/yoga|mat|resistance|fitness|gym|band/i, "fitness"],
+  [/belt|armband|bottle|accessor/i, "accessories"],
+];
+
+export function normalizeCategory(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+
+  const lower = value.trim().toLowerCase();
+  if ((KNOWN_CATEGORIES as readonly string[]).includes(lower)) return lower;
+
+  for (const [pattern, category] of CATEGORY_SYNONYMS) {
+    if (pattern.test(lower)) return category;
+  }
+
+  // An unrecognised category is dropped rather than guessed at: a wrong
+  // category silently filters the catalog down to nothing.
+  return undefined;
+}
+
+export function normalizeAmountPaise(value: unknown): number | undefined {
+  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) return undefined;
+  return Math.round(value);
+}
+
+export function normalizeCurrency(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const code = value.trim().toUpperCase();
+  return /^[A-Z]{3}$/.test(code) ? code : undefined;
+}
+
+export function normalizeMerchantId(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const id = value.trim().toLowerCase();
+  // Merchant ids have a fixed shape. Anything else is model invention.
+  return /^merchant_[a-z0-9_]+$/.test(id) ? id : undefined;
+}
 
 /**
  * The ONLY component permitted to call an LLM.
@@ -125,16 +170,26 @@ export class ShoppingAgent {
       if (!raw) return fallback;
 
       const parsed = JSON.parse(raw) as Record<string, unknown>;
-      const explicit = Array.isArray(parsed.explicit_fields) ? (parsed.explicit_fields as string[]) : fallback.explicit_fields;
 
+      // Model output is untrusted and is normalized against known-good values
+      // before it goes anywhere near a draft order. Models do drift from the
+      // prompt: they return a free-text category like "running shoes" instead
+      // of "footwear", and name explicit_fields after the JSON keys
+      // ("max_amount_paise") rather than the constraint names the checks use
+      // ("max_amount"). Passing either through unvalidated would corrupt
+      // provenance, which is what Check 2 reasons about.
       return {
         constraints: {
-          max_amount_paise: typeof parsed.max_amount_paise === "number" ? parsed.max_amount_paise : fallback.constraints.max_amount_paise,
-          currency: typeof parsed.currency === "string" ? parsed.currency : fallback.constraints.currency,
-          merchant_id: typeof parsed.merchant_id === "string" ? parsed.merchant_id : fallback.constraints.merchant_id,
-          item_category: typeof parsed.item_category === "string" ? parsed.item_category : fallback.constraints.item_category,
+          max_amount_paise: normalizeAmountPaise(parsed.max_amount_paise) ?? fallback.constraints.max_amount_paise,
+          currency: normalizeCurrency(parsed.currency) ?? fallback.constraints.currency,
+          merchant_id: normalizeMerchantId(parsed.merchant_id) ?? fallback.constraints.merchant_id,
+          item_category: normalizeCategory(parsed.item_category) ?? fallback.constraints.item_category,
         },
-        explicit_fields: explicit,
+        // Provenance decides whether a payment is authorized, so it is never
+        // taken on the model's word. The deterministic parser reads the
+        // instruction itself and is the sole authority on what the user
+        // actually stated.
+        explicit_fields: fallback.explicit_fields,
       };
     } catch {
       // A model failure must never take down the checkout path.

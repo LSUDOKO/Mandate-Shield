@@ -17,7 +17,7 @@ export function loadConfig(env: NodeJS.ProcessEnv): Config {
   return {
     port: Number.parseInt(env.PORT ?? "3000", 10),
     groqApiKey: env.GROQ_API_KEY?.trim() || undefined,
-    groqModel: env.GROQ_MODEL?.trim() || "llama-3.3-70b-versatile",
+    groqModel: env.GROQ_MODEL?.trim() || "openai/gpt-oss-120b",
     razorpayKeyId: env.RAZORPAY_KEY_ID?.trim() || undefined,
     razorpayKeySecret: env.RAZORPAY_KEY_SECRET?.trim() || undefined,
     razorpayWebhookSecret: env.RAZORPAY_WEBHOOK_SECRET?.trim() || undefined,
