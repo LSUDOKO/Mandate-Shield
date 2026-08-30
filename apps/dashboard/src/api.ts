@@ -61,8 +61,17 @@ export interface Health {
   audit_chain: ChainResult;
 }
 
-async function json<T>(input: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(input, init);
+/**
+ * Where the API lives.
+ *
+ * Empty in local development, where Vite proxies /api to the dev server. Set
+ * to the deployed API's origin at build time (VITE_API_BASE) when the frontend
+ * and the API are hosted separately.
+ */
+const API_BASE = (import.meta.env.VITE_API_BASE ?? "").replace(/\/$/, "");
+
+async function json<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`, init);
 
   if (!res.ok) {
     const body = (await res.json().catch(() => ({}))) as { error?: string };
@@ -71,6 +80,8 @@ async function json<T>(input: string, init?: RequestInit): Promise<T> {
 
   return (await res.json()) as T;
 }
+
+export const apiBase = API_BASE;
 
 export const api = {
   health: () => json<Health>("/api/health"),

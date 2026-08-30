@@ -1,0 +1,656 @@
+/* Landing page.
+   Shares the console's state colours (green clears, red holds) but nothing
+   else: this surface is a marketing page, so it gets air, a display scale, and
+   a single accent used only where the product's one idea lands. */
+
+.landing {
+  --lp-bg: #0a0c10;
+  --lp-raise: #12151c;
+  --lp-line: #1e232d;
+  --lp-text: #f2f4f7;
+  --lp-dim: #8a94a6;
+  --lp-accent: #f0b429;
+  --lp-clear: #3ddc97;
+  --lp-hold: #ff5c5c;
+
+  --lp-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --lp-mono: "Geist Mono", "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-sans);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+.landing a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.landing :focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* -------------------------------------------------------------------- nav */
+
+.lp-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 68px;
+  padding: 0 28px;
+  background: rgb(10 12 16 / 0.86);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--lp-line);
+}
+
+.lp-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--lp-mono);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* A gate, not a shield badge: two posts with a gap the payment passes through. */
+.lp-mark {
+  width: 13px;
+  height: 15px;
+  flex: none;
+  border-left: 2px solid var(--lp-accent);
+  border-right: 2px solid var(--lp-accent);
+}
+
+.lp-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-size: 14px;
+  color: var(--lp-dim);
+  white-space: nowrap;
+}
+
+.lp-nav-links a:hover {
+  color: var(--lp-text);
+}
+
+@media (max-width: 720px) {
+  .lp-nav-links a {
+    display: none;
+  }
+}
+
+.lp-cta-sm {
+  padding: 7px 14px;
+  border: 1px solid var(--lp-line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--lp-text);
+  font-family: var(--lp-sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.lp-cta-sm:hover {
+  border-color: var(--lp-dim);
+}
+
+/* ------------------------------------------------------------------- hero */
+
+.lp-hero {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 88px 28px 72px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 56px;
+  align-items: center;
+}
+
+@media (max-width: 940px) {
+  .lp-hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 56px;
+    gap: 44px;
+  }
+}
+
+.lp-eyebrow {
+  margin: 0 0 20px;
+  font-family: var(--lp-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lp-accent);
+}
+
+.lp-hero h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 5.4vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  font-weight: 500;
+}
+
+/* Presentational line break that keeps the sentence readable as text. */
+.lp-break {
+  display: block;
+}
+
+@media (max-width: 620px) {
+  .lp-break {
+    display: none;
+  }
+}
+
+.lp-hero h1 em {
+  font-style: italic;
+  /* Descender clearance: "valid payment" carries a p and a y. */
+  line-height: 1.12;
+  padding-bottom: 2px;
+  display: inline-block;
+}
+
+.lp-sub {
+  margin: 22px 0 0;
+  max-width: 46ch;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--lp-dim);
+}
+
+.lp-actions {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.lp-cta {
+  padding: 12px 22px;
+  border: 1px solid var(--lp-accent);
+  border-radius: 4px;
+  background: var(--lp-accent);
+  color: #17130a;
+  font-family: var(--lp-sans);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.12s ease, filter 0.15s ease;
+}
+
+.lp-cta:hover {
+  filter: brightness(1.07);
+}
+
+.lp-cta:active {
+  transform: translateY(1px);
+}
+
+.lp-cta-ghost {
+  padding: 12px 22px;
+  border: 1px solid var(--lp-line);
+  border-radius: 4px;
+  font-size: 15px;
+  color: var(--lp-text);
+  transition: border-color 0.15s ease;
+}
+
+.lp-cta-ghost:hover {
+  border-color: var(--lp-dim);
+}
+
+/* ----------------------------------------------- signature: interception */
+
+.strip {
+  padding: 30px 26px;
+  border: 1px solid var(--lp-line);
+  border-radius: 6px;
+  background: var(--lp-raise);
+}
+
+.strip-track {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.strip-label {
+  font-family: var(--lp-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lp-dim);
+  white-space: nowrap;
+}
+
+.strip-label-end {
+  color: #4a5263;
+}
+
+.strip-rail {
+  position: relative;
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, var(--lp-line), var(--lp-line));
+  border-radius: 1px;
+}
+
+.strip-packet {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(0, -50%);
+  padding: 5px 10px;
+  border: 1px solid var(--lp-line);
+  border-radius: 3px;
+  background: var(--lp-bg);
+  font-family: var(--lp-mono);
+  font-size: 12px;
+  white-space: nowrap;
+  transition: left 1.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.strip[data-stage="travelling"] .strip-packet {
+  left: calc(100% - 76px);
+}
+
+.strip[data-stage="held"] .strip-packet {
+  left: calc(100% - 76px);
+  border-color: var(--lp-hold);
+  color: var(--lp-hold);
+}
+
+.strip-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.gate-line {
+  width: 2px;
+  height: 40px;
+  background: var(--lp-line);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.strip[data-stage="held"] .gate-line {
+  background: var(--lp-accent);
+  box-shadow: 0 0 12px rgb(240 180 41 / 0.5);
+}
+
+.gate-name {
+  font-family: var(--lp-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lp-dim);
+}
+
+.strip[data-stage="held"] .gate-name {
+  color: var(--lp-accent);
+}
+
+.strip-caption {
+  margin: 22px 0 0;
+  font-family: var(--lp-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--lp-dim);
+  min-height: 40px;
+}
+
+.strip[data-stage="held"] .strip-caption {
+  color: var(--lp-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip-packet,
+  .gate-line {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------- stat band */
+
+.lp-band {
+  border-top: 1px solid var(--lp-line);
+  border-bottom: 1px solid var(--lp-line);
+  background: var(--lp-raise);
+}
+
+.lp-stats {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 26px 28px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 860px) {
+  .lp-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+.lp-stats dt {
+  font-size: 12px;
+  color: var(--lp-dim);
+  letter-spacing: 0.01em;
+}
+
+.lp-stats dd {
+  margin: 6px 0 0;
+  font-family: var(--lp-mono);
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.lp-stat-zero {
+  color: var(--lp-clear);
+}
+
+/* --------------------------------------------------------------- sections */
+
+.lp-section {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 92px 28px;
+  border-bottom: 1px solid var(--lp-line);
+}
+
+.lp-section h2 {
+  margin: 0 0 18px;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  line-height: 1.15;
+  letter-spacing: -0.028em;
+  font-weight: 500;
+}
+
+.lp-h2-wide {
+  margin-bottom: 40px !important;
+}
+
+.lp-section p {
+  margin: 0 0 16px;
+  max-width: 62ch;
+  font-size: 16px;
+  line-height: 1.68;
+  color: var(--lp-dim);
+}
+
+/* Problem section: prose beside the pipeline it describes. */
+.lp-problem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  gap: 56px;
+  align-items: start;
+}
+
+@media (max-width: 940px) {
+  .lp-problem {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+}
+
+.lp-cite {
+  font-size: 14px !important;
+}
+
+.lp-cite a {
+  color: var(--lp-text);
+  border-bottom: 1px solid var(--lp-line);
+}
+
+.lp-cite a:hover {
+  border-color: var(--lp-accent);
+}
+
+.lp-flow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--lp-line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.lp-flow li {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 14px;
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--lp-line);
+  background: var(--lp-raise);
+}
+
+.lp-flow li:last-child {
+  border-bottom: 0;
+}
+
+.lp-flow-k {
+  font-family: var(--lp-mono);
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--lp-dim);
+  padding-top: 2px;
+}
+
+.lp-flow-v {
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.lp-flow-seal .lp-flow-k {
+  color: var(--lp-clear);
+}
+
+.lp-flow-gate {
+  background: #171307;
+}
+
+.lp-flow-gate .lp-flow-k {
+  color: var(--lp-accent);
+}
+
+/* Checks: a two-column reading list, not three equal cards. */
+.lp-checks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--lp-line);
+  border: 1px solid var(--lp-line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+@media (max-width: 780px) {
+  .lp-checks {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.lp-check {
+  padding: 26px 24px;
+  background: var(--lp-bg);
+}
+
+/* The fifth check spans both columns so the grid has no empty cell. */
+.lp-check:last-child {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 780px) {
+  .lp-check:last-child {
+    grid-column: auto;
+  }
+}
+
+.lp-check header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.lp-check h3 {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+.lp-threat {
+  font-family: var(--lp-mono);
+  font-size: 11px;
+  color: var(--lp-accent);
+  white-space: nowrap;
+}
+
+.lp-check p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.62;
+}
+
+/* Split section */
+.lp-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: 56px;
+  align-items: center;
+}
+
+@media (max-width: 940px) {
+  .lp-split {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+}
+
+.lp-panel {
+  border: 1px solid var(--lp-line);
+  border-radius: 6px;
+  background: var(--lp-raise);
+  overflow: hidden;
+}
+
+.lp-panel-title {
+  margin: 0 !important;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--lp-line);
+  font-family: var(--lp-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lp-hold) !important;
+}
+
+.lp-panel-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--lp-line);
+  font-size: 14px;
+  color: var(--lp-dim);
+}
+
+.lp-panel-row:last-child {
+  border-bottom: 0;
+}
+
+.lp-mono {
+  font-family: var(--lp-mono);
+  font-size: 13.5px;
+  color: var(--lp-text);
+  text-align: right;
+}
+
+.lp-panel-bad .lp-mono {
+  color: var(--lp-hold);
+}
+
+/* Honesty section */
+.lp-honest {
+  background: var(--lp-raise);
+  border-radius: 0;
+}
+
+.lp-honest p {
+  max-width: 72ch;
+}
+
+/* ----------------------------------------------------------------- footer */
+
+.lp-footer {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 44px 28px 64px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.lp-footer-main p {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--lp-dim);
+  max-width: 44ch;
+}
+
+.lp-footer-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 14px;
+  color: var(--lp-dim);
+}
+
+.lp-footer-links a:hover {
+  color: var(--lp-text);
+}
+
+/* Back to the landing page from the console. */
+.console-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: color 0.14s ease, border-color 0.14s ease;
+}
+
+.console-back:hover {
+  color: var(--text);
+  border-color: var(--dim);
+}

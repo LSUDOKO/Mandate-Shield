@@ -28,6 +28,7 @@ const app = createApp({
   webhookSecret: config.razorpayWebhookSecret,
   agentMode: agent.mode,
   gatewayMode: gateway.mode,
+  allowedOrigins: config.allowedOrigins,
 });
 
 app.listen(config.port, () => {

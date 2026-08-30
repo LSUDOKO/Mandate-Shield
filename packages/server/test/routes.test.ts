@@ -168,3 +168,49 @@ describe("POST /api/webhooks/razorpay", () => {
     expect(res.status).toBe(401);
   });
 });
+
+describe("CORS allowlist", () => {
+  function appWithOrigins(allowedOrigins: string[]) {
+    const pipeline = new Pipeline({
+      agent: new ShoppingAgent({ actorSecret: SECRET, agentId: "agent-1" }),
+      gateway: new PaymentGateway({}),
+      ledger,
+      actorHmacSecret: SECRET,
+    });
+    return createApp({
+      pipeline,
+      ledger,
+      webhookSecret: WEBHOOK_SECRET,
+      agentMode: "offline",
+      gatewayMode: "mock",
+      allowedOrigins,
+    });
+  }
+
+  it("allows any origin when no allowlist is configured", async () => {
+    const res = await request(appWithOrigins([]))
+      .get("/api/health")
+      .set("origin", "https://anything.example");
+    expect(res.status).toBe(200);
+  });
+
+  it("allows an origin on the list", async () => {
+    const res = await request(appWithOrigins(["https://shield.example"]))
+      .get("/api/health")
+      .set("origin", "https://shield.example");
+    expect(res.status).toBe(200);
+    expect(res.headers["access-control-allow-origin"]).toBe("https://shield.example");
+  });
+
+  it("refuses an origin that is not on the list", async () => {
+    const res = await request(appWithOrigins(["https://shield.example"]))
+      .get("/api/health")
+      .set("origin", "https://evil.example");
+    expect(res.status).toBeGreaterThanOrEqual(400);
+  });
+
+  it("still serves callers that send no origin, such as curl and health checks", async () => {
+    const res = await request(appWithOrigins(["https://shield.example"])).get("/api/health");
+    expect(res.status).toBe(200);
+  });
+});

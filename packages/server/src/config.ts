@@ -7,6 +7,8 @@ export interface Config {
   razorpayWebhookSecret?: string;
   actorHmacSecret: string;
   auditDbPath: string;
+  /** Comma-separated origins allowed to call the API from a browser. */
+  allowedOrigins: string[];
 }
 
 /**
@@ -23,5 +25,9 @@ export function loadConfig(env: NodeJS.ProcessEnv): Config {
     razorpayWebhookSecret: env.RAZORPAY_WEBHOOK_SECRET?.trim() || undefined,
     actorHmacSecret: env.ACTOR_HMAC_SECRET?.trim() || "dev-only-change-me",
     auditDbPath: env.AUDIT_DB_PATH?.trim() || "./data/audit.db",
+    allowedOrigins:
+      env.ALLOWED_ORIGINS?.split(",")
+        .map((origin) => origin.trim())
+        .filter(Boolean) ?? [],
   };
 }

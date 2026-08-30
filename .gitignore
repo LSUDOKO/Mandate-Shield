@@ -10,3 +10,6 @@ data/*.db-shm
 apps/dashboard/dist/
 coverage/
 .DS_Store
+
+# Unrelated W3C WebMCP spec clone that lives in this directory.
+webmcp/

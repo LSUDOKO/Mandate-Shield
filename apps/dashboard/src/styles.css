@@ -3,7 +3,7 @@
    paise, so the interface is set in mono and aligned in columns like the
    ledger it is. Colour carries state and nothing else. */
 
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500&display=swap");
 
 :root {
   --ink: #0b0e14;
@@ -69,6 +69,7 @@ body {
   font-family: var(--sans);
   color: var(--dim);
   font-size: 13px;
+  flex: 1 1 320px;
 }
 
 .columns {

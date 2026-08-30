@@ -6,7 +6,7 @@ import { TransactionDetail } from "./components/TransactionDetail";
 import { AuditPanel } from "./components/AuditPanel";
 import { AttackSimulator } from "./components/AttackSimulator";
 
-export function App() {
+export function App({ onBack }: { onBack?: () => void }) {
   const [health, setHealth] = useState<Health | null>(null);
   const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
   const [audit, setAudit] = useState<AuditEntry[]>([]);
@@ -46,6 +46,11 @@ export function App() {
           A valid signature does not guarantee valid intent. Five deterministic checks stand between
           the agent and the mandate.
         </p>
+        {onBack && (
+          <button type="button" className="console-back" onClick={onBack}>
+            Back to overview
+          </button>
+        )}
       </header>
 
       {health && <StatusBar health={health} />}
