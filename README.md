@@ -4,6 +4,10 @@
 
 Built for the Razorpay AI Buildathon 2026 — Track 01, AI Growth & Agentic Commerce.
 
+**Live: [mandate-shield.vercel.app](https://mandate-shield.vercel.app)** · [Console](https://mandate-shield.vercel.app/#console) · [Benchmark results](packages/benchmarks/results.md)
+
+The deployed console runs the real Groq agent and the real deterministic engine. Its audit ledger is in-memory, because serverless instances have no persistent disk; `docker compose up` runs the same system with the SQLite ledger and a durable hash chain.
+
 It blocks transactions where the *signed* payment doesn't match what the user actually intended — even when the signature is cryptographically perfect — and proves it works with measured precision and recall on a synthetic attack benchmark, not a cherry-picked demo.
 
 ---
