@@ -1,0 +1,21 @@
+{
+  "name": "@mandate-shield/audit",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Append-only, hash-chained decision log. Tamper-evident by construction.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc --build && node -e \"require('node:fs').copyFileSync('src/schema.sql','dist/schema.sql')\""
+  },
+  "dependencies": {
+    "@mandate-shield/core": "*",
+    "better-sqlite3": "^11.7.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12"
+  }
+}

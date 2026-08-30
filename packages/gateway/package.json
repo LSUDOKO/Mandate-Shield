@@ -1,0 +1,17 @@
+{
+  "name": "@mandate-shield/gateway",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Razorpay wrapper: orders on PASS, payment links on BLOCK, webhooks to close the loop.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "dependencies": {
+    "razorpay": "^2.9.5"
+  }
+}
