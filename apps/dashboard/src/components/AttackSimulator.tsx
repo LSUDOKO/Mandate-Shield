@@ -23,7 +23,7 @@ const SCENARIOS = [
     label: "Clean purchase",
     kind: "primary" as const,
     instruction: "buy running shoes from merchant_123 under 3000 INR",
-    title: "Everything traces to explicit intent — expect PASS",
+    title: "Everything traces to explicit intent, so this should pass",
   },
   {
     id: "merchant",

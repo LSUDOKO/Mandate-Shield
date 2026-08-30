@@ -33,7 +33,7 @@ export function Root() {
   }, []);
 
   useEffect(() => {
-    document.title = view === "console" ? "Console — Mandate Shield" : "Mandate Shield";
+    document.title = view === "console" ? "Console: Mandate Shield" : "Mandate Shield";
   }, [view]);
 
   return view === "console" ? <App onBack={openLanding} /> : <Landing onOpenConsole={openConsole} />;

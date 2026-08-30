@@ -16,7 +16,7 @@ export function AuditPanel({ entries, chain, persistence }: Props) {
   return (
     <section className="panel audit">
       <header>
-        <h2>Audit log — hash-chained</h2>
+        <h2>Audit log, hash-chained</h2>
         {chain && (
           <span
             style={{

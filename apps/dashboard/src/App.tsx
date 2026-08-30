@@ -53,7 +53,20 @@ export function App({ onBack }: { onBack?: () => void }) {
         )}
       </header>
 
-      {health && <StatusBar health={health} />}
+      {health ? (
+        <StatusBar health={health} />
+      ) : (
+        // Without this the console reads as empty rather than loading during
+        // the first poll, which on a cold serverless instance is long enough
+        // to notice.
+        <div className="status">
+          <span className="chip">
+            <span className="dot" />
+            <span className="key">connecting</span>
+            <span>reading shield status</span>
+          </span>
+        </div>
+      )}
 
       <AttackSimulator transactions={transactions} onDone={refresh} onError={setError} />
 
@@ -86,7 +99,7 @@ export function App({ onBack }: { onBack?: () => void }) {
       <p className="scope">
         Mandate Shield addresses 5 of the 48 threats catalogued in <em>Beyond the Mandate: A
         Systematic Security Analysis of the Agent Payments Protocol (AP2)</em> (arXiv:2608.23858),
-        chosen for being concrete and directly relevant to a Razorpay-style mandate flow — not
+        chosen for being concrete and directly relevant to a Razorpay-style mandate flow, not
         because the other 43 do not matter. No AI runs inside the verification path.
       </p>
     </div>
