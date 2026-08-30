@@ -13,3 +13,4 @@ coverage/
 
 # Unrelated W3C WebMCP spec clone that lives in this directory.
 webmcp/
+.vercel
