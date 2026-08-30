@@ -3,6 +3,7 @@ import { api, type TransactionRecord } from "../api";
 
 interface Props {
   transactions: TransactionRecord[];
+  onRecord: (record: TransactionRecord) => void;
   onDone: () => void | Promise<void>;
   onError: (message: string) => void;
 }
@@ -48,7 +49,7 @@ const SCENARIOS = [
   },
 ];
 
-export function AttackSimulator({ transactions, onDone, onError }: Props) {
+export function AttackSimulator({ transactions, onRecord, onDone, onError }: Props) {
   const [instruction, setInstruction] = useState(
     "buy running shoes from merchant_123 under 3000 INR",
   );
@@ -57,7 +58,11 @@ export function AttackSimulator({ transactions, onDone, onError }: Props) {
   async function send(text: string, extra: { nonce?: string } = {}) {
     setBusy(true);
     try {
-      await api.submit(text, extra);
+      // The response carries the whole record, so it is handed straight to the
+      // feed. On a serverless host the next request may reach a different
+      // instance, whose in-memory list would not contain this transaction.
+      const record = await api.submit(text, extra);
+      onRecord(record);
       await onDone();
     } catch (error) {
       onError(error instanceof Error ? error.message : String(error));

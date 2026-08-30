@@ -13,6 +13,23 @@ export function App({ onBack }: { onBack?: () => void }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * Records this session submitted, kept client-side.
+   *
+   * On a serverless host each request may land on a different instance, so a
+   * transaction created by one POST will not appear in the next GET's list.
+   * Merging what we submitted with whatever the server returns keeps the feed
+   * correct on both a single long-running server and a fleet of instances.
+   */
+  const mergeRecords = useCallback(
+    (fromServer: TransactionRecord[], local: TransactionRecord[]): TransactionRecord[] => {
+      const byId = new Map<string, TransactionRecord>();
+      for (const record of [...fromServer, ...local]) byId.set(record.transaction_id, record);
+      return [...byId.values()].sort((a, b) => b.created_at.localeCompare(a.created_at));
+    },
+    [],
+  );
+
   const refresh = useCallback(async () => {
     try {
       const [nextHealth, nextTransactions, nextAudit] = await Promise.all([
@@ -21,12 +38,19 @@ export function App({ onBack }: { onBack?: () => void }) {
         api.audit(),
       ]);
       setHealth(nextHealth);
-      setTransactions(nextTransactions);
-      setAudit(nextAudit.entries);
+      setTransactions((current) => mergeRecords(nextTransactions, current));
+      setAudit((current) =>
+        nextAudit.entries.length >= current.length ? nextAudit.entries : current,
+      );
       setError(null);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     }
+  }, [mergeRecords]);
+
+  const addRecord = useCallback((record: TransactionRecord) => {
+    setTransactions((current) => [record, ...current.filter((r) => r.transaction_id !== record.transaction_id)]);
+    setSelected(record.transaction_id);
   }, []);
 
   useEffect(() => {
@@ -68,7 +92,12 @@ export function App({ onBack }: { onBack?: () => void }) {
         </div>
       )}
 
-      <AttackSimulator transactions={transactions} onDone={refresh} onError={setError} />
+      <AttackSimulator
+        transactions={transactions}
+        onRecord={addRecord}
+        onDone={refresh}
+        onError={setError}
+      />
 
       {error && <p className="error">{error}</p>}
 

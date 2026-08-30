@@ -1,0 +1,51 @@
+- generic [ref=f4e131]:
+  - banner [ref=f4e132]:
+    - heading "Mandate Shield" [level=1] [ref=f4e133]
+    - paragraph [ref=f4e134]: A valid signature does not guarantee valid intent. Five deterministic checks stand between the agent and the mandate.
+    - button "Back to overview" [ref=f4e135] [cursor=pointer]
+  - generic [ref=f4e166]:
+    - generic [ref=f4e167]:
+      - generic [ref=f4e169]: agent
+      - generic [ref=f4e170]: groq
+    - generic [ref=f4e171]:
+      - generic [ref=f4e173]: razorpay
+      - generic [ref=f4e174]: mock
+    - generic [ref=f4e175]:
+      - generic [ref=f4e177]: audit chain
+      - generic [ref=f4e178]: 0 entries, intact
+    - generic [ref=f4e179]:
+      - generic [ref=f4e181]: shield
+      - generic [ref=f4e182]: 5 checks, deterministic
+  - generic [ref=f4e136]:
+    - generic [ref=f4e137]:
+      - textbox "Shopping instruction" [ref=f4e138]:
+        - /placeholder: buy running shoes from merchant_123 under 3000 INR
+        - text: buy running shoes from merchant_123 under 3000 INR
+      - button "Send to shield" [ref=f4e139] [cursor=pointer]
+    - generic [ref=f4e140]:
+      - generic [ref=f4e141]: Run a scenario
+      - generic [ref=f4e142]:
+        - button "Clean purchase" [ref=f4e143] [cursor=pointer]
+        - button "Unnamed merchant" [ref=f4e144] [cursor=pointer]
+        - button "Poisoned listing" [ref=f4e145] [cursor=pointer]
+        - button "Over the cap" [ref=f4e146] [cursor=pointer]
+        - button "Replay last nonce" [disabled] [ref=f4e147]
+  - generic [ref=f4e148]:
+    - generic [ref=f4e149]:
+      - generic [ref=f4e150]:
+        - heading "Transactions" [level=2] [ref=f4e151]
+        - generic [ref=f4e152]: 0 held / 0 seen
+      - paragraph [ref=f4e183]: No transactions yet. Send an instruction to watch it move through the shield.
+    - generic [ref=f4e184]:
+      - heading "Evidence" [level=2] [ref=f4e186]
+      - paragraph [ref=f4e187]: Select a transaction to see what the shield checked and why.
+  - generic [ref=f4e159]:
+    - generic [ref=f4e160]:
+      - heading "Audit log — hash-chained" [level=2] [ref=f4e161]
+      - generic [ref=f4e188]: chain intact
+    - paragraph [ref=f4e189]: in-memory (serverless); history resets when the instance recycles
+    - paragraph [ref=f4e190]: Every decision, pass or block, gets written here.
+  - paragraph [ref=f4e164]:
+    - text: Mandate Shield addresses 5 of the 48 threats catalogued in
+    - emphasis [ref=f4e165]: "Beyond the Mandate: A Systematic Security Analysis of the Agent Payments Protocol (AP2)"
+    - text: (arXiv:2608.23858), chosen for being concrete and directly relevant to a Razorpay-style mandate flow — not because the other 43 do not matter. No AI runs inside the verification path.
