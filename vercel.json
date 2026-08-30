@@ -1,14 +1,19 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run build && npm run build -w @mandate-shield/dashboard",
+  "buildCommand": "npm run build && node scripts/build-api.mjs && npm run build -w @mandate-shield/dashboard",
   "outputDirectory": "apps/dashboard/dist",
   "installCommand": "npm install",
   "framework": null,
   "functions": {
-    "api/index.mts": {
+    "api/index.mjs": {
       "runtime": "@vercel/node@5.1.11",
       "maxDuration": 30
     }
   },
-  "rewrites": [{ "source": "/api/(.*)", "destination": "/api/index" }]
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index"
+    }
+  ]
 }

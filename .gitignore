@@ -14,3 +14,7 @@ coverage/
 # Unrelated W3C WebMCP spec clone that lives in this directory.
 webmcp/
 .vercel
+
+# Generated serverless bundle (built by scripts/build-api.mjs).
+api/index.mjs
+api/package.json

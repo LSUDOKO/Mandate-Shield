@@ -21,7 +21,8 @@
     "benchmark:generate": "npm run generate -w @mandate-shield/benchmarks",
     "dev": "npm run dev -w @mandate-shield/server",
     "start": "node packages/server/dist/index.js",
-    "dashboard": "npm run dev -w @mandate-shield/dashboard"
+    "dashboard": "npm run dev -w @mandate-shield/dashboard",
+    "build:api": "node scripts/build-api.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
