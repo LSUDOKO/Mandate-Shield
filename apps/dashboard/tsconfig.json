@@ -13,5 +13,6 @@
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["src", "vite.config.ts"]
+  "$comment": "vite.config.ts is deliberately excluded: vitest hoists Vite 5 to the root while this app builds on Vite 6, and typechecking the config against both copies conflicts. Vite validates its own config at build time.",
+  "include": ["src"]
 }

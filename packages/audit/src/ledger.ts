@@ -8,6 +8,49 @@ import type { AuditEntry, ReplayLedger } from "@mandate-shield/core";
 /** The chain's anchor. Nothing precedes the first entry. */
 export const GENESIS_HASH = `sha256:${"0".repeat(64)}`;
 
+/**
+ * Reads schema.sql from beside this module when it is present.
+ *
+ * `tsc --build` compiles TypeScript but does not copy .sql files, so a
+ * compiled dist/ may not have one. Rather than making startup depend on a
+ * copy step that is easy to forget, fall back to the source tree and then to
+ * an inline copy — the schema is small and creating it is idempotent.
+ */
+function loadSchema(): string {
+  const here = dirname(fileURLToPath(import.meta.url));
+
+  for (const candidate of [join(here, "schema.sql"), join(here, "..", "src", "schema.sql")]) {
+    try {
+      return readFileSync(candidate, "utf8");
+    } catch {
+      // Try the next location.
+    }
+  }
+
+  return INLINE_SCHEMA;
+}
+
+const INLINE_SCHEMA = `
+CREATE TABLE IF NOT EXISTS audit_entries (
+  seq             INTEGER PRIMARY KEY AUTOINCREMENT,
+  entry_id        TEXT NOT NULL UNIQUE,
+  transaction_id  TEXT NOT NULL,
+  timestamp       TEXT NOT NULL,
+  decision        TEXT NOT NULL CHECK (decision IN ('PASS', 'BLOCK')),
+  failed_checks   TEXT NOT NULL,
+  reason          TEXT NOT NULL,
+  snapshot_hash   TEXT NOT NULL,
+  prev_entry_hash TEXT NOT NULL,
+  entry_hash      TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_audit_transaction ON audit_entries (transaction_id);
+CREATE TABLE IF NOT EXISTS nonces (
+  nonce          TEXT PRIMARY KEY,
+  transaction_id TEXT NOT NULL,
+  seen_at        TEXT NOT NULL
+);
+`;
+
 export interface AppendInput {
   entry_id: string;
   transaction_id: string;
@@ -68,8 +111,7 @@ export class AuditLedger implements ReplayLedger {
     if (path !== ":memory:") mkdirSync(dirname(path), { recursive: true });
     this.db = new Database(path);
     this.db.pragma("journal_mode = WAL");
-    const schemaPath = join(dirname(fileURLToPath(import.meta.url)), "schema.sql");
-    this.db.exec(readFileSync(schemaPath, "utf8"));
+    this.db.exec(loadSchema());
   }
 
   append(input: AppendInput): AuditEntry {

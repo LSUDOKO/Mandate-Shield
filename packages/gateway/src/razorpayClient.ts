@@ -107,11 +107,19 @@ export class PaymentGateway {
       };
     }
 
+    // `customer` is required by the SDK's request type. Razorpay uses it to
+    // address the link, so the values are passed through when the caller knows
+    // them and left blank otherwise rather than being invented.
     const link = await this.client.paymentLink.create({
       amount: input.amount_paise,
       currency: input.currency,
       description: `Manual approval required: ${input.reason}`.slice(0, 2048),
       reference_id: input.transaction_id,
+      customer: {
+        name: input.customer?.name ?? "",
+        email: input.customer?.email ?? "",
+        contact: "",
+      },
       notify: { sms: false, email: false },
       reminder_enable: false,
       notes: {

@@ -42,7 +42,10 @@ export class ShoppingAgent {
 
   async draftOrder(instruction: string, ids: { transactionId: string; nonce: string }): Promise<DraftOrder> {
     const intent = this.mode === "groq" ? await this.parseWithGroq(instruction) : parseIntent(instruction);
-    const candidates = searchCatalog(intent, this.catalog);
+    // The raw instruction is passed as query text so a product the user named
+    // is actually reachable. Whatever comes back is still untrusted: a poisoned
+    // listing ranks like any other, and Check 3 is what stops it.
+    const candidates = searchCatalog({ ...intent, query_text: instruction }, this.catalog);
 
     if (candidates.length === 0) {
       throw new Error(`No catalog item satisfies the instruction: "${instruction}"`);

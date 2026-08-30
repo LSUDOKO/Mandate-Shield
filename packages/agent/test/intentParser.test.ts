@@ -49,3 +49,33 @@ describe("searchCatalog", () => {
     expect(searchCatalog(parseIntent("buy running shoes, budget 5 INR"))).toEqual([]);
   });
 });
+
+describe("searchCatalog product-name matching", () => {
+  it("ranks a product the user named by name ahead of the rest", () => {
+    const results = searchCatalog({
+      constraints: { max_amount_paise: 500000 },
+      query_text: "buy the Marathon Pro 5",
+    });
+    expect(results[0]?.name).toBe("Marathon Pro 5");
+  });
+
+  it("surfaces a poisoned listing rather than hiding it, so Check 3 can catch it", () => {
+    // Relevance ranking must not double as a security filter. If the agent
+    // quietly skipped hostile listings, the attack would never reach the
+    // component whose job is to block it.
+    const results = searchCatalog({
+      constraints: { max_amount_paise: 500000 },
+      query_text: "buy the Elite Runner Z",
+    });
+    expect(results[0]?.poisoned).toBe(true);
+  });
+
+  it("falls back to plain filtering when no product name matches", () => {
+    const results = searchCatalog({
+      constraints: { max_amount_paise: 200000, item_category: "footwear" },
+      query_text: "buy something comfortable",
+    });
+    expect(results.length).toBeGreaterThan(0);
+    expect(results.every((p) => p.price_paise <= 200000)).toBe(true);
+  });
+});
