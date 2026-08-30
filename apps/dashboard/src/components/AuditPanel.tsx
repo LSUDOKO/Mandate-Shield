@@ -3,6 +3,8 @@ import { shortHash, type AuditEntry, type ChainResult } from "../api";
 interface Props {
   entries: AuditEntry[];
   chain: ChainResult | null;
+  /** Set when the host cannot persist the chain, so the UI can say so. */
+  persistence?: string;
 }
 
 /**
@@ -10,7 +12,7 @@ interface Props {
  * any past entry breaks every hash after it, which is what the integrity
  * indicator in the header reports.
  */
-export function AuditPanel({ entries, chain }: Props) {
+export function AuditPanel({ entries, chain, persistence }: Props) {
   return (
     <section className="panel audit">
       <header>
@@ -26,6 +28,8 @@ export function AuditPanel({ entries, chain }: Props) {
           </span>
         )}
       </header>
+
+      {persistence && <p className="audit-note">{persistence}</p>}
 
       <div className="audit-list">
         {entries.length === 0 ? (

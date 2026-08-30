@@ -59,6 +59,8 @@ export interface Health {
   agent_mode: "groq" | "offline";
   gateway_mode: "live" | "mock";
   audit_chain: ChainResult;
+  /** Present on serverless deployments, where the chain is per-instance. */
+  audit_persistence?: string;
 }
 
 /**

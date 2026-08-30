@@ -77,7 +77,11 @@ export function App({ onBack }: { onBack?: () => void }) {
         )}
       </div>
 
-      <AuditPanel entries={audit} chain={health?.audit_chain ?? null} />
+      <AuditPanel
+        entries={audit}
+        chain={health?.audit_chain ?? null}
+        persistence={health?.audit_persistence}
+      />
 
       <p className="scope">
         Mandate Shield addresses 5 of the 48 threats catalogued in <em>Beyond the Mandate: A

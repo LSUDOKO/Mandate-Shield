@@ -3,12 +3,12 @@ import { createSnapshot, verify, DEFAULT_POLICY } from "@mandate-shield/core";
 import type { AuditEntry, Policy, StateSnapshot, Verdict } from "@mandate-shield/core";
 import type { ShoppingAgent } from "@mandate-shield/agent";
 import type { PaymentGateway } from "@mandate-shield/gateway";
-import type { AuditLedger } from "@mandate-shield/audit";
+import type { DecisionLedger } from "@mandate-shield/audit";
 
 export interface PipelineDeps {
   agent: ShoppingAgent;
   gateway: PaymentGateway;
-  ledger: AuditLedger;
+  ledger: DecisionLedger;
   actorHmacSecret: string;
   policy?: Policy;
 }

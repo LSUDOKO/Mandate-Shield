@@ -1,11 +1,11 @@
 import { Router, type Request, type Response } from "express";
 import { parseWebhookEvent, verifyWebhookSignature } from "@mandate-shield/gateway";
-import type { AuditLedger } from "@mandate-shield/audit";
+import type { DecisionLedger } from "@mandate-shield/audit";
 import type { Pipeline } from "./pipeline.js";
 
 export interface RouteDeps {
   pipeline: Pipeline;
-  ledger: AuditLedger;
+  ledger: DecisionLedger;
   webhookSecret?: string;
   agentMode: "groq" | "offline";
   gatewayMode: "live" | "mock";
