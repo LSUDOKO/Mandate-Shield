@@ -1,3 +1,4 @@
+import { ArrowLeft } from "@phosphor-icons/react";
 import { useCallback, useEffect, useState } from "react";
 import { api, type AuditEntry, type Health, type TransactionRecord } from "./api";
 import { StatusBar } from "./components/StatusBar";
@@ -12,6 +13,8 @@ export function App({ onBack }: { onBack?: () => void }) {
   const [audit, setAudit] = useState<AuditEntry[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  /** The row that just came back from a submit, for its arrival animation. */
+  const [arrivedId, setArrivedId] = useState<string | null>(null);
 
   /**
    * Records this session submitted, kept client-side.
@@ -51,7 +54,16 @@ export function App({ onBack }: { onBack?: () => void }) {
   const addRecord = useCallback((record: TransactionRecord) => {
     setTransactions((current) => [record, ...current.filter((r) => r.transaction_id !== record.transaction_id)]);
     setSelected(record.transaction_id);
+    // Marks this row for the arrival animation. An effect clears it once the
+    // animation has run, so a later re-render (the 2s poll) does not replay it.
+    setArrivedId(record.transaction_id);
   }, []);
+
+  useEffect(() => {
+    if (!arrivedId) return;
+    const id = setTimeout(() => setArrivedId(null), 600);
+    return () => clearTimeout(id);
+  }, [arrivedId]);
 
   useEffect(() => {
     void refresh();
@@ -65,13 +77,17 @@ export function App({ onBack }: { onBack?: () => void }) {
   return (
     <div className="app">
       <header className="masthead">
-        <h1>Mandate Shield</h1>
+        <h1>
+          <span className="mark" aria-hidden="true" />
+          Mandate Shield
+        </h1>
         <p className="tagline">
           A valid signature does not guarantee valid intent. Five deterministic checks stand between
           the agent and the mandate.
         </p>
         {onBack && (
           <button type="button" className="console-back" onClick={onBack}>
+            <ArrowLeft size={14} weight="bold" />
             Back to overview
           </button>
         )}
@@ -87,7 +103,7 @@ export function App({ onBack }: { onBack?: () => void }) {
           <span className="chip">
             <span className="dot" />
             <span className="key">connecting</span>
-            <span>reading shield status</span>
+            <span className="val">reading shield status</span>
           </span>
         </div>
       )}
@@ -105,6 +121,8 @@ export function App({ onBack }: { onBack?: () => void }) {
         <TransactionFeed
           transactions={transactions}
           selectedId={active?.transaction_id ?? null}
+          arrivedId={arrivedId}
+          loading={health === null}
           onSelect={setSelected}
         />
         {active ? (

@@ -3,10 +3,12 @@ dist/
 *.tsbuildinfo
 .env
 .env.local
-data/*.db
-data/*.db-journal
-data/*.db-wal
-data/*.db-shm
+# The SQLite ledger, wherever a workspace package writes it. Unanchored so
+# it matches packages/server/data/ as well as a root-level data/.
+**/data/*.db
+**/data/*.db-journal
+**/data/*.db-wal
+**/data/*.db-shm
 apps/dashboard/dist/
 coverage/
 .DS_Store

@@ -18,12 +18,7 @@ export function AuditPanel({ entries, chain, persistence }: Props) {
       <header>
         <h2>Audit log, hash-chained</h2>
         {chain && (
-          <span
-            style={{
-              color: chain.intact ? "var(--cleared)" : "var(--held)",
-              fontSize: 11,
-            }}
-          >
+          <span className={`chain-state ${chain.intact ? "intact" : "broken"}`}>
             {chain.intact ? "chain intact" : `chain broken at entry ${chain.brokenAtIndex}`}
           </span>
         )}
@@ -44,7 +39,7 @@ export function AuditPanel({ entries, chain, persistence }: Props) {
                 <div className="chainlink">
                   {shortHash(entry.prev_entry_hash)} → {shortHash(entry.entry_hash)}
                 </div>
-                <div style={{ color: "var(--dim)", marginTop: 2 }}>
+                <div className="failed">
                   {entry.failed_checks.length > 0
                     ? entry.failed_checks.join(", ")
                     : "all checks passed"}

@@ -20,7 +20,7 @@ export function TransactionDetail({ record }: { record: TransactionRecord }) {
     <section className="panel">
       <header>
         <h2>Evidence</h2>
-        <span style={{ color: "var(--dim)", fontSize: 11 }}>
+        <span className="panel-meta">
           snapshot {shortHash(snapshot.snapshot_hash)}
         </span>
       </header>
@@ -98,7 +98,7 @@ export function TransactionDetail({ record }: { record: TransactionRecord }) {
 
           {gateway.kind === "payment_link" && (
             <>
-              <p style={{ margin: "0 0 8px", fontFamily: "var(--sans)", color: "var(--dim)" }}>
+              <p className="note">
                 Blocked, so the purchase was handed back to the customer to complete with a normal
                 UPI PIN or OTP. The agent is out of the loop; the customer is not.
               </p>

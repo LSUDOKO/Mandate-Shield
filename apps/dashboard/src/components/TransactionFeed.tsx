@@ -4,22 +4,49 @@ import { CheckLadder } from "./CheckLadder";
 interface Props {
   transactions: TransactionRecord[];
   selectedId: string | null;
+  /** The row that just arrived from a submit, for its entrance animation. */
+  arrivedId?: string | null;
+  /** True while the first poll is still in flight. */
+  loading?: boolean;
   onSelect: (id: string) => void;
 }
 
-export function TransactionFeed({ transactions, selectedId, onSelect }: Props) {
+/** Placeholder rows shaped like the feed items they will become. */
+function Skeleton() {
+  return (
+    <>
+      {[0, 1, 2].map((row) => (
+        <div className="skeleton" key={row}>
+          <div className="skeleton-bar" style={{ width: `${72 - row * 12}%` }} />
+          <div className="skeleton-bar" style={{ width: "38%" }} />
+        </div>
+      ))}
+    </>
+  );
+}
+
+export function TransactionFeed({
+  transactions,
+  selectedId,
+  arrivedId,
+  loading,
+  onSelect,
+}: Props) {
+  const held = transactions.filter((t) => t.verdict.decision === "BLOCK").length;
+
   return (
     <section className="panel">
       <header>
         <h2>Transactions</h2>
-        <span style={{ color: "var(--dim)", fontSize: 11 }}>
-          {transactions.filter((t) => t.verdict.decision === "BLOCK").length} held /{" "}
-          {transactions.length} seen
+        <span className="panel-meta">
+          {held} held / {transactions.length} seen
         </span>
       </header>
 
       <div className="feed">
-        {transactions.length === 0 ? (
+        {loading && transactions.length === 0 ? (
+          <Skeleton />
+        ) : transactions.length === 0 ? (
           <p className="empty">
             No transactions yet. Send an instruction to watch it move through the shield.
           </p>
@@ -30,7 +57,9 @@ export function TransactionFeed({ transactions, selectedId, onSelect }: Props) {
               <button
                 key={record.transaction_id}
                 type="button"
-                className={`feed-item ${blocked ? "block" : "pass"}`}
+                className={`feed-item ${blocked ? "block" : "pass"}${
+                  record.transaction_id === arrivedId ? " is-new" : ""
+                }`}
                 aria-current={record.transaction_id === selectedId}
                 onClick={() => onSelect(record.transaction_id)}
               >

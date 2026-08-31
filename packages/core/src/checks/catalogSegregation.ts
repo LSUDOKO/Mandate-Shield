@@ -58,7 +58,7 @@ export function catalogSegregationCheck(snapshot: StateSnapshot, policy: Policy)
   }
 
   if (poisoned.length > 0) {
-    return fail(`${poisoned.length} catalog field(s) attempted to assert authorization instead of remaining plain product data — ${poisoned.join("; ")}. Catalog content is data, never permission.`);
+    return fail(`${poisoned.length} catalog field(s) attempted to assert authorization instead of remaining plain product data: ${poisoned.join("; ")}. Catalog content is data, never permission.`);
   }
 
   return {

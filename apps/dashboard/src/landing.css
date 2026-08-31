@@ -1,40 +1,81 @@
 /* Landing page.
-   Shares the console's state colours (green clears, red holds) but nothing
-   else: this surface is a marketing page, so it gets air, a display scale, and
-   a single accent used only where the product's one idea lands. */
 
-.landing {
-  --lp-bg: #0a0c10;
-  --lp-raise: #12151c;
-  --lp-line: #1e232d;
-  --lp-text: #f2f4f7;
-  --lp-dim: #8a94a6;
-  --lp-accent: #f0b429;
-  --lp-clear: #3ddc97;
-  --lp-hold: #ff5c5c;
+   Shares every token with the console (tokens.css) and differs only in
+   density: this surface gets air and a display type scale, because it is
+   making one argument rather than showing many facts. */
 
-  --lp-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --lp-mono: "Geist Mono", "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
-
-  background: var(--lp-bg);
-  color: var(--lp-text);
-  font-family: var(--lp-sans);
+.lp {
   min-height: 100dvh;
   overflow-x: hidden;
 }
 
-.landing a {
-  color: inherit;
-  text-decoration: none;
+/* ------------------------------------------------------------------ shared */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity var(--mid) var(--ease), transform var(--mid) var(--ease);
 }
 
-.landing :focus-visible {
-  outline: 2px solid var(--lp-accent);
-  outline-offset: 2px;
-  border-radius: 2px;
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
 }
 
-/* -------------------------------------------------------------------- nav */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease),
+    transform var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--dim);
+  background: var(--raise);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  /* Dark ink on amber: 9.4:1, comfortably past AA. */
+  color: #17130a;
+  font-weight: 600;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #f6c246;
+  border-color: #f6c246;
+  color: #17130a;
+}
+
+.btn-lg {
+  padding: 14px 24px;
+  font-size: 15px;
+}
+
+.btn-quiet {
+  padding: 8px 14px;
+  font-size: 13.5px;
+  border-color: var(--line);
+}
+
+/* --------------------------------------------------------------------- nav */
 
 .lp-nav {
   position: sticky;
@@ -46,16 +87,17 @@
   gap: 24px;
   height: 68px;
   padding: 0 28px;
-  background: rgb(10 12 16 / 0.86);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--lp-line);
+  background: rgb(8 9 13 / 0.82);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--line);
 }
 
 .lp-brand {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--lp-mono);
+  font-family: var(--mono);
   font-size: 14px;
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -67,344 +109,459 @@
   width: 13px;
   height: 15px;
   flex: none;
-  border-left: 2px solid var(--lp-accent);
-  border-right: 2px solid var(--lp-accent);
+  border-left: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
 }
 
 .lp-nav-links {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 24px;
   font-size: 14px;
-  color: var(--lp-dim);
+  color: var(--text-soft);
   white-space: nowrap;
 }
 
-.lp-nav-links a:hover {
-  color: var(--lp-text);
+.lp-nav-links a {
+  transition: color var(--fast) var(--ease);
 }
 
-@media (max-width: 720px) {
+.lp-nav-links a:hover {
+  color: var(--text);
+}
+
+@media (max-width: 820px) {
   .lp-nav-links a {
     display: none;
   }
 }
 
-.lp-cta-sm {
-  padding: 7px 14px;
-  border: 1px solid var(--lp-line);
-  border-radius: 4px;
-  background: transparent;
-  color: var(--lp-text);
-  font-family: var(--lp-sans);
-  font-size: 14px;
-  cursor: pointer;
-  transition: border-color 0.15s ease;
-}
-
-.lp-cta-sm:hover {
-  border-color: var(--lp-dim);
-}
-
-/* ------------------------------------------------------------------- hero */
+/* -------------------------------------------------------------------- hero */
 
 .lp-hero {
-  max-width: 1240px;
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 88px 28px 72px;
+  /* Sized to the content rather than to a full viewport height: the two
+     columns differ in height by design, and padding tuned to fill the screen
+     left a visible void under the shorter one. */
+  padding: 76px 28px 78px;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: 56px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+  gap: 64px;
+  /* Centred rather than stretched: the two columns are different heights by
+     design, and stretching left a visible void under the shorter one. */
   align-items: center;
 }
 
-@media (max-width: 940px) {
+@media (max-width: 980px) {
   .lp-hero {
     grid-template-columns: minmax(0, 1fr);
-    padding-top: 56px;
+    padding: 52px 24px 64px;
     gap: 44px;
   }
 }
 
 .lp-eyebrow {
-  margin: 0 0 20px;
-  font-family: var(--lp-mono);
-  font-size: 12px;
-  letter-spacing: 0.12em;
+  margin: 0 0 22px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--lp-accent);
+  color: var(--accent);
 }
 
 .lp-hero h1 {
   margin: 0;
-  font-size: clamp(2.4rem, 5.4vw, 4rem);
-  line-height: 1.06;
-  letter-spacing: -0.035em;
+  font-size: clamp(2.5rem, 5.2vw, 3.9rem);
+  line-height: 1.05;
+  letter-spacing: -0.038em;
   font-weight: 500;
+  text-wrap: balance;
 }
 
-/* Presentational line break that keeps the sentence readable as text. */
-.lp-break {
-  display: block;
-}
-
-@media (max-width: 620px) {
-  .lp-break {
-    display: none;
-  }
-}
-
+/* Emphasis stays inside the same family: italic Geist, not a second font.
+   "valid payment" carries a p and a y, so the line box is opened up and given
+   reserve below to keep the descenders off the baseline of the next line. */
 .lp-hero h1 em {
   font-style: italic;
-  /* Descender clearance: "valid payment" carries a p and a y. */
-  line-height: 1.12;
-  padding-bottom: 2px;
+  line-height: 1.14;
+  padding-bottom: 3px;
   display: inline-block;
 }
 
 .lp-sub {
-  margin: 22px 0 0;
-  max-width: 46ch;
-  font-size: 17px;
-  line-height: 1.6;
-  color: var(--lp-dim);
+  margin: 24px 0 0;
+  max-width: 47ch;
+  font-size: 16.5px;
+  line-height: 1.62;
+  color: var(--text-soft);
 }
 
 .lp-actions {
-  margin-top: 32px;
+  margin-top: 34px;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
 }
 
-.lp-cta {
-  padding: 12px 22px;
-  border: 1px solid var(--lp-accent);
-  border-radius: 4px;
-  background: var(--lp-accent);
-  color: #17130a;
-  font-family: var(--lp-sans);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.12s ease, filter 0.15s ease;
+/* ------------------------------------------------ signature: interception */
+
+.icept {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-.lp-cta:hover {
-  filter: brightness(1.07);
+.icept-frame {
+  padding: 26px 26px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, var(--raise), var(--surface));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.03), 0 24px 60px rgb(0 0 0 / 0.35);
 }
 
-.lp-cta:active {
-  transform: translateY(1px);
-}
-
-.lp-cta-ghost {
-  padding: 12px 22px;
-  border: 1px solid var(--lp-line);
-  border-radius: 4px;
-  font-size: 15px;
-  color: var(--lp-text);
-  transition: border-color 0.15s ease;
-}
-
-.lp-cta-ghost:hover {
-  border-color: var(--lp-dim);
-}
-
-/* ----------------------------------------------- signature: interception */
-
-.strip {
-  padding: 30px 26px;
-  border: 1px solid var(--lp-line);
-  border-radius: 6px;
-  background: var(--lp-raise);
-}
-
-.strip-track {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
+.icept-head {
+  display: flex;
   align-items: center;
-  gap: 14px;
-}
-
-.strip-label {
-  font-family: var(--lp-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--lp-dim);
-  white-space: nowrap;
+  color: var(--dim);
 }
 
-.strip-label-end {
-  color: #4a5263;
-}
-
-.strip-rail {
+/* The rail the mandate travels along. The packet is positioned as a
+   percentage of this box so the animation is resolution-independent. */
+.icept-track {
   position: relative;
-  display: block;
-  height: 2px;
-  background: linear-gradient(90deg, var(--lp-line), var(--lp-line));
-  border-radius: 1px;
+  height: 92px;
+  margin: 14px 0 0;
 }
 
-.strip-packet {
+.icept-rail {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+/* A pulse that runs the rail once as the packet approaches, so the rail reads
+   as a live channel rather than a drawn line. */
+.icept-scan {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 84px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+}
+
+.icept[data-stage="moving"] .icept-scan {
+  animation: icept-scan 1.5s var(--ease) forwards;
+}
+
+/* Travels to the gate at 62% of the track, then fades. The pulse is 84px
+   wide, so it is offset by its own width to finish flush with the gate. */
+@keyframes icept-scan {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  22% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(calc(62vw * 0.36));
+  }
+}
+
+/* The gate: two posts with a gap, matching the brand mark. They close in and
+   light up at the moment the packet is caught. */
+/* The gate straddles the packet, so its posts are wider apart than the
+   packet is and stay visible when the packet stops between them. */
+.icept-gate {
+  position: absolute;
+  top: 50%;
+  left: 62%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 186px;
+}
+
+.icept-post {
+  width: 2px;
+  height: 34px;
+  background: var(--line-strong);
+  border-radius: 1px;
+  transition: background var(--mid) var(--ease), height var(--mid) var(--ease),
+    box-shadow var(--mid) var(--ease);
+}
+
+.icept[data-stage="caught"] .icept-post,
+.icept[data-stage="opened"] .icept-post {
+  background: var(--accent);
+  height: 62px;
+  box-shadow: 0 0 18px rgb(240 180 41 / 0.5);
+}
+
+/* The packet shrinks with the viewport but not as fast as the gap would, so
+   below this width the posts are pulled in and the packet is set narrower to
+   keep the gate bracketing it rather than hiding behind it. */
+@media (max-width: 560px) {
+  .icept-gate {
+    gap: 172px;
+  }
+
+  .icept-packet {
+    padding: 6px 9px;
+    gap: 7px;
+  }
+
+  .icept-packet-label {
+    display: none;
+  }
+}
+
+.icept-packet {
   position: absolute;
   top: 50%;
   left: 0;
   transform: translate(0, -50%);
-  padding: 5px 10px;
-  border: 1px solid var(--lp-line);
-  border-radius: 3px;
-  background: var(--lp-bg);
-  font-family: var(--lp-mono);
-  font-size: 12px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 7px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--ink);
   white-space: nowrap;
-  transition: left 1.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease,
-    color 0.3s ease;
+  transition: left 1.45s var(--ease), border-color var(--mid) var(--ease),
+    color var(--mid) var(--ease), box-shadow var(--mid) var(--ease);
 }
 
-.strip[data-stage="travelling"] .strip-packet {
-  left: calc(100% - 76px);
+.icept[data-stage="moving"] .icept-packet,
+.icept[data-stage="caught"] .icept-packet,
+.icept[data-stage="opened"] .icept-packet {
+  left: 62%;
+  transform: translate(-50%, -50%);
 }
 
-.strip[data-stage="held"] .strip-packet {
-  left: calc(100% - 76px);
-  border-color: var(--lp-hold);
-  color: var(--lp-hold);
+.icept[data-stage="caught"] .icept-packet,
+.icept[data-stage="opened"] .icept-packet {
+  border-color: var(--hold);
+  box-shadow: 0 0 0 3px rgb(255 92 92 / 0.09);
 }
 
-.strip-gate {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.gate-line {
-  width: 2px;
-  height: 40px;
-  background: var(--lp-line);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-}
-
-.strip[data-stage="held"] .gate-line {
-  background: var(--lp-accent);
-  box-shadow: 0 0 12px rgb(240 180 41 / 0.5);
-}
-
-.gate-name {
-  font-family: var(--lp-mono);
+.icept-packet-label {
+  font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--lp-dim);
+  color: var(--faint);
 }
 
-.strip[data-stage="held"] .gate-name {
-  color: var(--lp-accent);
+.icept-packet-amount {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  transition: color var(--mid) var(--ease);
 }
 
-.strip-caption {
-  margin: 22px 0 0;
-  font-family: var(--lp-mono);
-  font-size: 12.5px;
+.icept[data-stage="caught"] .icept-packet-amount,
+.icept[data-stage="opened"] .icept-packet-amount {
+  color: var(--hold);
+}
+
+.icept-gatename {
+  margin-top: -6px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+  transition: color var(--mid) var(--ease);
+}
+
+.icept[data-stage="caught"] .icept-gatename,
+.icept[data-stage="opened"] .icept-gatename {
+  color: var(--accent);
+}
+
+/* The payoff. Collapsed until the packet is opened, so the two numbers arrive
+   as a consequence of the interception rather than sitting there from the
+   start.
+
+   The element is a two-column grid, so the reveal is driven by max-height
+   rather than grid-template-rows: one element cannot animate a row track and
+   define column tracks for the same axis. The ceiling is generous enough for
+   the content at any supported width and is never actually reached, so the
+   easing stays smooth instead of snapping. */
+.icept-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  background: var(--line);
+  border: 0 solid var(--line);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  transition: max-height var(--mid) var(--ease), opacity var(--mid) var(--ease),
+    margin-top var(--mid) var(--ease);
+}
+
+.icept[data-stage="opened"] .icept-split {
+  max-height: 140px;
+  margin-top: 18px;
+  opacity: 1;
+  border-width: 1px;
+}
+
+.icept-side {
+  background: var(--surface);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.icept-k {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.icept-v {
+  font-family: var(--mono);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.icept-side-bad .icept-v {
+  color: var(--hold);
+}
+
+.icept-caption {
+  margin: 0;
+  font-size: 14px;
   line-height: 1.6;
-  color: var(--lp-dim);
-  min-height: 40px;
+  color: var(--text-soft);
+  min-height: 44px;
 }
 
-.strip[data-stage="held"] .strip-caption {
-  color: var(--lp-text);
+.icept-verdict {
+  color: var(--hold);
+  font-weight: 600;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .strip-packet,
-  .gate-line {
-    transition: none;
+@media (max-width: 420px) {
+  .icept-split {
+    grid-template-columns: 1fr;
+  }
+
+  .icept[data-stage="opened"] .icept-split {
+    max-height: 220px;
   }
 }
 
-/* ------------------------------------------------------------- stat band */
+/* --------------------------------------------------------------- stat band */
 
 .lp-band {
-  border-top: 1px solid var(--lp-line);
-  border-bottom: 1px solid var(--lp-line);
-  background: var(--lp-raise);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
 }
 
 .lp-stats {
-  max-width: 1240px;
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 26px 28px;
+  padding: 30px 28px;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 24px;
+  gap: 26px;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 880px) {
   .lp-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
+    gap: 22px;
   }
 }
 
 .lp-stats dt {
-  font-size: 12px;
-  color: var(--lp-dim);
-  letter-spacing: 0.01em;
+  font-size: 12.5px;
+  color: var(--dim);
 }
 
 .lp-stats dd {
-  margin: 6px 0 0;
-  font-family: var(--lp-mono);
-  font-size: 25px;
+  margin: 7px 0 0;
+  font-family: var(--mono);
+  font-size: 26px;
   font-weight: 500;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
-.lp-stat-zero {
-  color: var(--lp-clear);
+.lp-stats dd.is-good {
+  color: var(--clear);
 }
 
-/* --------------------------------------------------------------- sections */
+/* ---------------------------------------------------------------- sections */
 
 .lp-section {
-  max-width: 1240px;
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 92px 28px;
-  border-bottom: 1px solid var(--lp-line);
+  padding: 104px 28px;
+  border-bottom: 1px solid var(--line);
 }
 
-.lp-section h2 {
-  margin: 0 0 18px;
-  font-size: clamp(1.7rem, 3vw, 2.3rem);
-  line-height: 1.15;
-  letter-spacing: -0.028em;
+@media (max-width: 720px) {
+  .lp-section {
+    padding: 72px 24px;
+  }
+}
+
+.lp-section h2,
+.lp-honest h2,
+.lp-close h2 {
+  margin: 0 0 20px;
+  font-size: clamp(1.75rem, 3.1vw, 2.35rem);
+  line-height: 1.14;
+  letter-spacing: -0.03em;
   font-weight: 500;
+  text-wrap: balance;
 }
 
-.lp-h2-wide {
-  margin-bottom: 40px !important;
+.lp-h2-lead {
+  margin-bottom: 42px !important;
 }
 
 .lp-section p {
   margin: 0 0 16px;
   max-width: 62ch;
-  font-size: 16px;
-  line-height: 1.68;
-  color: var(--lp-dim);
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--text-soft);
 }
 
-/* Problem section: prose beside the pipeline it describes. */
 .lp-problem {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
-  gap: 56px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.88fr);
+  gap: 60px;
   align-items: start;
 }
 
-@media (max-width: 940px) {
+@media (max-width: 980px) {
   .lp-problem {
     grid-template-columns: minmax(0, 1fr);
     gap: 40px;
@@ -413,33 +570,36 @@
 
 .lp-cite {
   font-size: 14px !important;
+  color: var(--dim) !important;
 }
 
 .lp-cite a {
-  color: var(--lp-text);
-  border-bottom: 1px solid var(--lp-line);
+  color: var(--text-soft);
+  border-bottom: 1px solid var(--line-strong);
+  transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease);
 }
 
 .lp-cite a:hover {
-  border-color: var(--lp-accent);
+  color: var(--text);
+  border-color: var(--accent);
 }
 
 .lp-flow {
   list-style: none;
   margin: 0;
   padding: 0;
-  border: 1px solid var(--lp-line);
-  border-radius: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
   overflow: hidden;
 }
 
 .lp-flow li {
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-columns: 96px minmax(0, 1fr);
   gap: 14px;
-  padding: 15px 18px;
-  border-bottom: 1px solid var(--lp-line);
-  background: var(--lp-raise);
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
 }
 
 .lp-flow li:last-child {
@@ -447,62 +607,87 @@
 }
 
 .lp-flow-k {
-  font-family: var(--lp-mono);
-  font-size: 11px;
-  letter-spacing: 0.09em;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--lp-dim);
-  padding-top: 2px;
+  color: var(--dim);
+  padding-top: 3px;
 }
 
 .lp-flow-v {
   font-size: 14.5px;
   line-height: 1.5;
+  color: var(--text-soft);
 }
 
-.lp-flow-seal .lp-flow-k {
-  color: var(--lp-clear);
+.lp-flow .is-seal .lp-flow-k {
+  color: var(--clear);
 }
 
-.lp-flow-gate {
-  background: #171307;
+.lp-flow .is-gate {
+  background: linear-gradient(90deg, rgb(240 180 41 / 0.07), transparent);
+  border-left: 2px solid var(--accent);
 }
 
-.lp-flow-gate .lp-flow-k {
-  color: var(--lp-accent);
+.lp-flow .is-gate .lp-flow-k {
+  color: var(--accent);
 }
 
-/* Checks: a two-column reading list, not three equal cards. */
+.lp-flow .is-gate .lp-flow-v {
+  color: var(--text);
+}
+
+/* Checks: a two-column reading list. The fifth spans both columns so the grid
+   never renders an empty cell. */
 .lp-checks {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
-  background: var(--lp-line);
-  border: 1px solid var(--lp-line);
-  border-radius: 6px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
   overflow: hidden;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 800px) {
   .lp-checks {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
 .lp-check {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
   padding: 26px 24px;
-  background: var(--lp-bg);
+  background: var(--ink);
+  transition: background var(--fast) var(--ease);
 }
 
-/* The fifth check spans both columns so the grid has no empty cell. */
+.lp-check:hover {
+  background: var(--surface);
+}
+
 .lp-check:last-child {
   grid-column: 1 / -1;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 800px) {
   .lp-check:last-child {
     grid-column: auto;
   }
+}
+
+.lp-check-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  color: var(--accent);
+  flex: none;
 }
 
 .lp-check header {
@@ -510,20 +695,20 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .lp-check h3 {
   margin: 0;
-  font-size: 16.5px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: -0.015em;
 }
 
 .lp-threat {
-  font-family: var(--lp-mono);
-  font-size: 11px;
-  color: var(--lp-accent);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--accent);
   white-space: nowrap;
 }
 
@@ -531,17 +716,19 @@
   margin: 0;
   font-size: 14.5px;
   line-height: 1.62;
+  color: var(--text-soft);
+  max-width: 58ch;
 }
 
 /* Split section */
 .lp-split {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
-  gap: 56px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.88fr);
+  gap: 60px;
   align-items: center;
 }
 
-@media (max-width: 940px) {
+@media (max-width: 980px) {
   .lp-split {
     grid-template-columns: minmax(0, 1fr);
     gap: 36px;
@@ -549,21 +736,22 @@
 }
 
 .lp-panel {
-  border: 1px solid var(--lp-line);
-  border-radius: 6px;
-  background: var(--lp-raise);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
   overflow: hidden;
 }
 
 .lp-panel-title {
   margin: 0 !important;
   padding: 13px 18px;
-  border-bottom: 1px solid var(--lp-line);
-  font-family: var(--lp-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--lp-hold) !important;
+  color: var(--hold) !important;
+  background: var(--hold-soft);
 }
 
 .lp-panel-row {
@@ -572,9 +760,9 @@
   justify-content: space-between;
   gap: 16px;
   padding: 13px 18px;
-  border-bottom: 1px solid var(--lp-line);
+  border-bottom: 1px solid var(--line);
   font-size: 14px;
-  color: var(--lp-dim);
+  color: var(--dim);
 }
 
 .lp-panel-row:last-child {
@@ -582,32 +770,54 @@
 }
 
 .lp-mono {
-  font-family: var(--lp-mono);
+  font-family: var(--mono);
   font-size: 13.5px;
-  color: var(--lp-text);
+  color: var(--text);
   text-align: right;
 }
 
-.lp-panel-bad .lp-mono {
-  color: var(--lp-hold);
+.lp-panel-row.is-bad .lp-mono {
+  color: var(--hold);
 }
 
-/* Honesty section */
+/* Honesty section: full-bleed, single column, no grid. */
 .lp-honest {
-  background: var(--lp-raise);
-  border-radius: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.lp-honest > .reveal {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 88px 28px;
 }
 
 .lp-honest p {
-  max-width: 72ch;
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--text-soft);
 }
 
-/* ----------------------------------------------------------------- footer */
+/* Closing call. */
+.lp-close {
+  max-width: var(--shell);
+  margin: 0 auto;
+  padding: 104px 28px;
+  text-align: center;
+}
+
+.lp-close h2 {
+  margin-bottom: 28px;
+}
+
+/* ------------------------------------------------------------------ footer */
 
 .lp-footer {
-  max-width: 1240px;
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 44px 28px 64px;
+  padding: 40px 28px 64px;
+  border-top: 1px solid var(--line);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -618,39 +828,22 @@
 .lp-footer-main p {
   margin: 12px 0 0;
   font-size: 14px;
-  color: var(--lp-dim);
+  color: var(--dim);
   max-width: 44ch;
 }
 
 .lp-footer-links {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 20px;
   font-size: 14px;
-  color: var(--lp-dim);
+  color: var(--dim);
+}
+
+.lp-footer-links a {
+  transition: color var(--fast) var(--ease);
 }
 
 .lp-footer-links a:hover {
-  color: var(--lp-text);
-}
-
-/* Back to the landing page from the console. */
-.console-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 12px;
-  border: 1px solid var(--hairline);
-  border-radius: 3px;
-  background: transparent;
-  color: var(--dim);
-  font-family: var(--mono);
-  font-size: 11.5px;
-  cursor: pointer;
-  transition: color 0.14s ease, border-color 0.14s ease;
-}
-
-.console-back:hover {
   color: var(--text);
-  border-color: var(--dim);
 }

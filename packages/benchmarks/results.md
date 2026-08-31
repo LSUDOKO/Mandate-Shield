@@ -1,4 +1,4 @@
-# Mandate Shield — Benchmark Results
+# Mandate Shield: Benchmark Results
 
 Generated from a deterministic 50-transaction batch (50 evaluated).
 Reproduce with `npm run benchmark`. The batch is seeded, so these numbers are byte-stable.
@@ -62,4 +62,4 @@ negative rate is a defect to be fixed.
 
 These 5 threat classes are drawn from the 48 catalogued in *Beyond the Mandate: A Systematic Security
 Analysis of the Agent Payments Protocol (AP2)* (arXiv:2608.23858). They were chosen for being concrete and
-directly relevant to a Razorpay-style mandate flow — not because the other 43 do not matter.
+directly relevant to a Razorpay-style mandate flow, not because the other 43 do not matter.

@@ -48,7 +48,7 @@ function report(outcomes: Outcome[], metrics: Metrics): string {
   const falsePositives = outcomes.filter((o) => o.expected === "PASS" && o.actual === "BLOCK");
 
   const lines = [
-    "# Mandate Shield — Benchmark Results",
+    "# Mandate Shield: Benchmark Results",
     "",
     `Generated from a deterministic 50-transaction batch (${metrics.total} evaluated).`,
     "Reproduce with `npm run benchmark`. The batch is seeded, so these numbers are byte-stable.",
@@ -90,11 +90,11 @@ function report(outcomes: Outcome[], metrics: Metrics): string {
     "",
     falseNegatives.length === 0
       ? "**False negatives: none.** Every simulated attack was blocked."
-      : `**False negatives (${falseNegatives.length}) — attacks that slipped through:**\n\n${falseNegatives.map((o) => `- \`${o.id}\` (${o.threat_class})`).join("\n")}`,
+      : `**False negatives (${falseNegatives.length}) attacks that slipped through:**\n\n${falseNegatives.map((o) => `- \`${o.id}\` (${o.threat_class})`).join("\n")}`,
     "",
     falsePositives.length === 0
       ? "**False positives: none.** Every legitimate transaction passed."
-      : `**False positives (${falsePositives.length}) — legitimate transactions wrongly blocked:**\n\n${falsePositives.map((o) => `- \`${o.id}\` — failed [${o.failed_checks.join(", ")}]`).join("\n")}`,
+      : `**False positives (${falsePositives.length}) legitimate transactions wrongly blocked:**\n\n${falsePositives.map((o) => `- \`${o.id}\` failed [${o.failed_checks.join(", ")}]`).join("\n")}`,
     "",
     "## False-positive cost, in business terms",
     "",
@@ -114,7 +114,7 @@ function report(outcomes: Outcome[], metrics: Metrics): string {
     "",
     "These 5 threat classes are drawn from the 48 catalogued in *Beyond the Mandate: A Systematic Security",
     "Analysis of the Agent Payments Protocol (AP2)* (arXiv:2608.23858). They were chosen for being concrete and",
-    "directly relevant to a Razorpay-style mandate flow — not because the other 43 do not matter.",
+    "directly relevant to a Razorpay-style mandate flow, not because the other 43 do not matter.",
     "",
   ];
 
@@ -127,7 +127,7 @@ function main(): void {
   const outcomes = batch.map((testCase) => runCase(testCase, ledger));
   const metrics = computeMetrics(outcomes);
 
-  console.log("\nMandate Shield — 50-transaction benchmark\n");
+  console.log("\nMandate Shield: 50-transaction benchmark\n");
   console.log(`  Evaluated       ${metrics.total}`);
   console.log(`  True positives  ${metrics.tp}   (attacks blocked)`);
   console.log(`  False negatives ${metrics.fn}   (attacks missed)`);

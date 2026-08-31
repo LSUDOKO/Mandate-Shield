@@ -89,7 +89,14 @@ export function AttackSimulator({ transactions, onRecord, onDone, onError }: Pro
           aria-label="Shopping instruction"
         />
         <button type="submit" className="primary" disabled={busy || !instruction.trim()}>
-          {busy ? "Verifying…" : "Send to shield"}
+          {busy ? (
+            <>
+              <span className="spinner" aria-hidden="true" />
+              Verifying
+            </>
+          ) : (
+            "Send to shield"
+          )}
         </button>
       </form>
 
