@@ -21,7 +21,10 @@ export function ProductCard({ product, onAdd }: ProductCardProps) {
   return (
     <article className="card">
       <div className="card-image">
-        <img src={product.image_url} alt="" loading="lazy" />
+        {/* The container owns the aspect ratio, so the grid never reflows as
+            photographs arrive. alt is empty because the product name sits
+            directly beneath: announcing it twice is noise to a screen reader. */}
+        <img src={product.image_url} alt="" loading="lazy" decoding="async" />
         <span className="card-category">{product.category}</span>
       </div>
 

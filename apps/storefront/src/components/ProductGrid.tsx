@@ -15,15 +15,15 @@ export function ProductGrid({ products, category, onCategory, onAdd }: ProductGr
   return (
     <>
       <section className="hero">
-        <p className="hero-eyebrow">Secured by Mandate Shield</p>
+        <p className="hero-eyebrow">Run gear, checked before it charges you</p>
         <h1 className="hero-title">
-          A valid signature does not
+          Shop like normal.
           <br />
-          mean a valid payment.
+          Nothing signs <em>without you.</em>
         </h1>
         <p className="hero-copy">
-          Every checkout here runs through five deterministic checks before the payment mandate is
-          signed. No model decides whether your money moves.
+          Every checkout runs five deterministic checks before the payment mandate is signed. You
+          see each one decide, on your own order. No model decides whether your money moves.
         </p>
       </section>
 
