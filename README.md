@@ -4,9 +4,17 @@
 
 Built for the Razorpay AI Buildathon 2026 — Track 01, AI Growth & Agentic Commerce.
 
-**Live: [mandate-shield.vercel.app](https://mandate-shield.vercel.app)** · [Console](https://mandate-shield.vercel.app/#console) · [Benchmark results](packages/benchmarks/results.md)
+**Live:**
+[Shop](https://mandate-shield-store.pages.dev) ·
+[Operator console](https://mandate-shield-console.pages.dev/#console) ·
+[API health](https://mandate-shield-api.onrender.com/api/health) ·
+[Benchmark results](packages/benchmarks/results.md)
 
-The deployed console runs the real Groq agent and the real deterministic engine. Its audit ledger is in-memory, because serverless instances have no persistent disk; `docker compose up` runs the same system with the SQLite ledger and a durable hash chain.
+The shop is what a customer sees; the console is what an operator sees. Both call the same API and show the same verdict from opposite sides of it.
+
+Two things to know before reading anything into a live run. The API is on Render's free plan, so the first request after an idle period waits roughly a minute for the instance to wake. And the deployed audit ledger survives restarts within an instance but not a redeploy, so the chain being intact means it verifies now, not that it holds every decision ever made; `docker compose up` runs the same system with a durable SQLite chain.
+
+`/api/health` always reports which mode each component is actually in, so a mock is never presented as a live integration.
 
 It blocks transactions where the *signed* payment doesn't match what the user actually intended — even when the signature is cryptographically perfect — and proves it works with measured precision and recall on a synthetic attack benchmark, not a cherry-picked demo.
 
@@ -131,7 +139,7 @@ Nothing here needs an API key. A fresh clone runs the full suite and the benchma
 
 ```bash
 npm install
-npm test           # 163 tests
+npm test           # 220 tests
 npm run build
 npm run benchmark  # 50 transactions through the real verifier
 ```
@@ -150,12 +158,23 @@ If those ports are already taken:
 API_PORT=3555 DASHBOARD_PORT=5555 docker compose up --build
 ```
 
-Or locally, in two terminals:
+Or locally, in separate terminals:
 
 ```bash
-npm run dev        # API on :3000
-npm run dashboard  # dashboard on :5173
+npm run dev         # API on :3000
+npm run storefront  # shop on :5174
+npm run dashboard   # console on :5173
 ```
+
+To let Claude do the shopping, run the MCP server instead of a browser:
+
+```bash
+npm run mcp         # stdio, for Claude Desktop
+npm run mcp:http    # HTTP on :3100/mcp, for web clients
+```
+
+Copy `claude_desktop_config_example.json` into your Claude Desktop config and
+set the absolute path. See `packages/mcp-server/README.md`.
 
 ### Adding credentials
 
@@ -291,11 +310,32 @@ packages/
   gateway/      Razorpay orders, payment links, webhooks
   server/       Express API composing the pipeline
   benchmarks/   50-transaction batch, metrics, committed results
+  mcp-server/   MCP tools, so Claude can shop through the pipeline
 apps/
   dashboard/    React + Vite operations console
+  storefront/   The customer-facing shop
 ```
 
 The verifier collects **every** check result rather than stopping at the first failure, so the audit log records the complete picture of what went wrong.
+
+---
+
+## Deployment
+
+| Surface | Host | Why there |
+|---|---|---|
+| Shop, operator console | Cloudflare Pages | Static bundles; nothing server-side to run |
+| API | Render (`render.yaml`) | A long-lived process, so the SQLite ledger has a filesystem to chain onto |
+| MCP server | Runs locally | Claude Desktop starts it per client over stdio |
+
+Both frontends are built with `VITE_API_BASE` set to the API's origin and read
+it at runtime; unset, they call a same-origin `/api`, which is what the Vite dev
+proxy serves.
+
+CORS is open on the deployed API. It holds no user data and moves no real money,
+and a demo people are meant to open from anywhere is worth more than an
+allowlist that only looks like protection. Set `ALLOWED_ORIGINS` to lock it to
+named origins.
 
 ---
 
