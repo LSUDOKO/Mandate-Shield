@@ -6,6 +6,16 @@ export interface CatalogProduct {
   merchant_id: string;
   price_paise: number;
   category: string;
+  /**
+   * Presentation-only fields. The verifier never reads them: catalog text is
+   * data, and only sku, name, unit_price_paise and qty may reach a cart at all.
+   * A poisoned listing therefore carries its authorization claim in `name`,
+   * which is the field Check 3 actually scans.
+   */
+  description?: string;
+  image_url?: string;
+  rating?: number;
+  in_stock?: boolean;
   /** Marks deliberately hostile fixtures used to exercise Check 3. */
   poisoned?: boolean;
 }

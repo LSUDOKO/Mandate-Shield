@@ -74,8 +74,11 @@ export class ShoppingAgent {
   private readonly actorSecret: string;
   private readonly agentId: string;
   private readonly catalog: CatalogProduct[];
+  /** Kept so `withCatalog` can rebuild an identical agent over fewer products. */
+  private readonly options: ShoppingAgentOptions;
 
   constructor(options: ShoppingAgentOptions) {
+    this.options = options;
     const key = options.groqApiKey?.trim();
     this.client = key ? new Groq({ apiKey: key }) : null;
     this.mode = this.client ? "groq" : "offline";
@@ -83,6 +86,20 @@ export class ShoppingAgent {
     this.actorSecret = options.actorSecret;
     this.agentId = options.agentId ?? "shopping-agent-1";
     this.catalog = options.catalog ?? MOCK_CATALOG;
+  }
+
+  /**
+   * The same agent, restricted to a narrower catalog.
+   *
+   * A surface that already knows which listing the user picked (a storefront
+   * cart, an MCP client acting on a search result) uses this so the agent
+   * cannot draft a different product than the one on screen. It changes what
+   * the agent may choose from and nothing else: provenance, signing and every
+   * check behave identically, so a poisoned listing chosen this way is still
+   * caught by Check 3 rather than smuggled past it.
+   */
+  withCatalog(catalog: CatalogProduct[]): ShoppingAgent {
+    return new ShoppingAgent({ ...this.options, catalog });
   }
 
   async draftOrder(instruction: string, ids: { transactionId: string; nonce: string }): Promise<DraftOrder> {
