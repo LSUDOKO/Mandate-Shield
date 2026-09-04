@@ -10,6 +10,9 @@ Built for the Razorpay AI Buildathon 2026 — Track 01, AI Growth & Agentic Comm
 [API health](https://mandate-shield-api.onrender.com/api/health) ·
 [Benchmark results](packages/benchmarks/results.md)
 
+**Let Claude do the shopping:** add `https://mandate-shield-mcp.onrender.com/mcp`
+as a connector. Ask it to buy something and watch the checks decide.
+
 The shop is what a customer sees; the console is what an operator sees. Both call the same API and show the same verdict from opposite sides of it.
 
 Two things to know before reading anything into a live run. The API is on Render's free plan, so the first request after an idle period waits roughly a minute for the instance to wake. And the deployed audit ledger survives restarts within an instance but not a redeploy, so the chain being intact means it verifies now, not that it holds every decision ever made; `docker compose up` runs the same system with a durable SQLite chain.
@@ -326,7 +329,7 @@ The verifier collects **every** check result rather than stopping at the first f
 |---|---|---|
 | Shop, operator console | Cloudflare Pages | Static bundles; nothing server-side to run |
 | API | Render (`render.yaml`) | A long-lived process, so the SQLite ledger has a filesystem to chain onto |
-| MCP server | Runs locally | Claude Desktop starts it per client over stdio |
+| MCP server | Render, `--sse` | Streamable HTTP at `/mcp`, so a remote client can connect without running anything |
 
 Both frontends are built with `VITE_API_BASE` set to the API's origin and read
 it at runtime; unset, they call a same-origin `/api`, which is what the Vite dev
