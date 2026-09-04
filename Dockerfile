@@ -13,7 +13,9 @@ COPY packages/audit/package.json packages/audit/
 COPY packages/gateway/package.json packages/gateway/
 COPY packages/server/package.json packages/server/
 COPY packages/benchmarks/package.json packages/benchmarks/
+COPY packages/mcp-server/package.json packages/mcp-server/
 COPY apps/dashboard/package.json apps/dashboard/
+COPY apps/storefront/package.json apps/storefront/
 RUN npm install
 
 FROM deps AS build

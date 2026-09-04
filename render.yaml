@@ -1,0 +1,45 @@
+# Render blueprint for the Mandate Shield API.
+#
+# The storefront and the operator console are static and deploy to Cloudflare
+# Pages; this is the Express API they both call, and the one component that has
+# to be a running process rather than a CDN artifact.
+services:
+  - type: web
+    name: mandate-shield-api
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm install && npm run build
+    startCommand: node packages/server/dist/index.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # The SQLite ledger writes here. Render's free tier has no persistent
+      # disk, so this survives restarts within an instance's life but not a
+      # redeploy: the hash chain is genuinely tamper-evident, and genuinely not
+      # durable. The health endpoint reports the chain so the difference is
+      # visible rather than assumed. A paid plan with a mounted disk at
+      # /var/data is what makes it durable.
+      - key: AUDIT_DB_PATH
+        value: /tmp/audit.db
+      # Set these in the dashboard. An absent key downgrades that component to
+      # its offline or mock mode rather than failing startup, so the service
+      # boots and runs end to end with none of them set.
+      - key: GROQ_API_KEY
+        sync: false
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false
+      - key: ACTOR_HMAC_SECRET
+        generateValue: true
+      # Browser origins allowed to call this API. Left unset it allows any
+      # origin, which suits a public demo; set it to the Pages URLs to lock it
+      # down.
+      - key: ALLOWED_ORIGINS
+        sync: false
