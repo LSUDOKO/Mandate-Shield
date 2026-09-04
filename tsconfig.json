@@ -6,6 +6,7 @@
     { "path": "./packages/audit" },
     { "path": "./packages/gateway" },
     { "path": "./packages/benchmarks" },
-    { "path": "./packages/server" }
+    { "path": "./packages/server" },
+    { "path": "./packages/mcp-server" }
   ]
 }

@@ -1,0 +1,25 @@
+{
+  "name": "@mandate-shield/mcp-server",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Model Context Protocol bridge: lets Claude shop through the Mandate Shield pipeline.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": "./dist/index.js" },
+  "scripts": {
+    "build": "tsc --build",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@mandate-shield/agent": "*",
+    "@mandate-shield/audit": "*",
+    "@mandate-shield/core": "*",
+    "@mandate-shield/gateway": "*",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}

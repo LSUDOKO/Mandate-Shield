@@ -1,0 +1,34 @@
+{
+  "$comment": [
+    "Copy this into Claude Desktop's config, replacing /ABSOLUTE/PATH/TO with the",
+    "path to your clone. Claude Desktop starts the server from its own working",
+    "directory, so the path to index.js has to be absolute.",
+    "",
+    "Run `npm install && npm run build` once first: this launches the compiled",
+    "server, not the TypeScript source.",
+    "",
+    "Every value in env is optional. With no GROQ_API_KEY the agent parses intent",
+    "deterministically instead of with a model; with no Razorpay keys the gateway",
+    "runs an in-process mock and no real money moves. The verification engine is",
+    "identical either way. Set ACTOR_HMAC_SECRET to a real secret before running",
+    "this anywhere but your own machine.",
+    "",
+    "Config file locations:",
+    "  macOS   ~/Library/Application Support/Claude/claude_desktop_config.json",
+    "  Windows %APPDATA%\\Claude\\claude_desktop_config.json",
+    "  Linux   ~/.config/Claude/claude_desktop_config.json"
+  ],
+  "mcpServers": {
+    "mandate-shield": {
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/TO/Mandate-Shield/packages/mcp-server/dist/index.js"],
+      "env": {
+        "GROQ_API_KEY": "",
+        "GROQ_MODEL": "openai/gpt-oss-120b",
+        "RAZORPAY_KEY_ID": "",
+        "RAZORPAY_KEY_SECRET": "",
+        "ACTOR_HMAC_SECRET": "dev-only-change-me"
+      }
+    }
+  }
+}
