@@ -98,3 +98,19 @@ describe("catalog fixtures", () => {
     }
   });
 });
+
+describe("hosted transport config", () => {
+  it("binds the port a platform host assigns", () => {
+    // Render and similar hosts inject PORT and health-check that exact port.
+    // Binding anything else means the service never passes its check.
+    expect(loadConfig({ PORT: "10000" }, ["--sse"]).port).toBe(10000);
+  });
+
+  it("lets an explicit MCP_PORT win, so a local run can pick its own", () => {
+    expect(loadConfig({ PORT: "10000", MCP_PORT: "3100" }).port).toBe(3100);
+  });
+
+  it("falls back to 3100 when neither is set", () => {
+    expect(loadConfig({}).port).toBe(3100);
+  });
+});

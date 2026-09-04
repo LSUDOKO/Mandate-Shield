@@ -9,6 +9,7 @@ import { registerSearchProducts } from "./tools/searchProducts.js";
 import { registerInitiatePurchase } from "./tools/initiatePurchase.js";
 import { registerGetTransactionStatus } from "./tools/getTransactionStatus.js";
 import { registerGetAuditLog } from "./tools/getAuditLog.js";
+import { AUDIT_PERSISTENCE_NOTE } from "./lib/ledger.js";
 
 const INSTRUCTIONS = `Mandate Shield sits between you and a payment.
 
@@ -63,6 +64,27 @@ async function runStdio(ctx: ServerContext): Promise<void> {
  */
 async function runHttp(ctx: ServerContext): Promise<void> {
   const httpServer = createHttpServer(async (req, res) => {
+    // A hosted MCP server still has to answer "are you up, and what are you
+    // actually running?" before a client will trust it with a purchase. The
+    // modes are the honest part: a mock gateway is never reported as live.
+    if (req.method === "GET" && (req.url === "/" || req.url?.startsWith("/health"))) {
+      const chain = ctx.ledger.verifyChain();
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(
+        JSON.stringify({
+          status: "ok",
+          service: "mandate-shield-mcp",
+          transport: "streamable-http",
+          endpoint: "/mcp",
+          agent_mode: ctx.agent.mode,
+          gateway_mode: ctx.gateway.mode,
+          audit_chain: chain,
+          audit_persistence: AUDIT_PERSISTENCE_NOTE,
+        }),
+      );
+      return;
+    }
+
     if (!req.url?.startsWith("/mcp")) {
       res.writeHead(404, { "content-type": "application/json" });
       res.end(JSON.stringify({ error: "Not found. The MCP endpoint is /mcp." }));
