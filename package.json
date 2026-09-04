@@ -22,6 +22,11 @@
     "dev": "npm run dev -w @mandate-shield/server",
     "start": "node packages/server/dist/index.js",
     "dashboard": "npm run dev -w @mandate-shield/dashboard",
+    "storefront": "npm run dev -w @mandate-shield/storefront",
+    "storefront:build": "npm run build -w @mandate-shield/storefront",
+    "mcp": "node packages/mcp-server/dist/index.js",
+    "mcp:dev": "npx tsx packages/mcp-server/src/index.ts",
+    "mcp:http": "node packages/mcp-server/dist/index.js --sse",
     "build:api": "node scripts/build-api.mjs"
   },
   "devDependencies": {

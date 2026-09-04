@@ -10,6 +10,7 @@ dist/
 **/data/*.db-wal
 **/data/*.db-shm
 apps/dashboard/dist/
+apps/storefront/dist/
 coverage/
 .DS_Store
 
