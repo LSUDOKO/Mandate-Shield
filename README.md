@@ -69,6 +69,11 @@ Mandate Shield defends against **5 of those 48**. That scope is deliberate and s
 
 ## Proof
 
+transaction in razorpay
+<img width="1902" height="936" alt="swappy-20260905-223226" src="https://github.com/user-attachments/assets/737edfa5-950d-4099-a597-f2e56c0a5b7c" />
+<img width="1889" height="877" alt="swappy-20260905-223259" src="https://github.com/user-attachments/assets/cf407254-c4ae-4b2e-9229-7b4e4c3a33c0" />
+
+
 Everything in this section is real output from this repository and the deployed services, captured as-is.
 
 ### The benchmark
